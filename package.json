@@ -11,8 +11,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest",
-    "test:run": "vitest run"
+    "test": "vitest --configLoader runner",
+    "test:run": "vitest run --configLoader runner"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
