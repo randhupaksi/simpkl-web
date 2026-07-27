@@ -5,7 +5,9 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Toaster } from 'sonner'
 
 import { queryClient } from './query-client'
+import { ThemeProvider } from './theme-provider'
 import { AppErrorFallback } from '@/shared/components/feedback/app-error-fallback'
+import { TooltipProvider } from '@/shared/components/ui'
 
 export function AppProviders({ children }: PropsWithChildren) {
   return (
@@ -13,13 +15,27 @@ export function AppProviders({ children }: PropsWithChildren) {
       FallbackComponent={AppErrorFallback}
       onReset={() => window.location.assign('/')}
     >
-      <QueryClientProvider client={queryClient}>
-        {children}
-        <Toaster position="top-right" richColors closeButton />
-        {import.meta.env.DEV ? (
-          <ReactQueryDevtools initialIsOpen={false} />
-        ) : null}
-      </QueryClientProvider>
+      <ThemeProvider>
+        <TooltipProvider delayDuration={400}>
+          <QueryClientProvider client={queryClient}>
+            {children}
+            <Toaster
+              position="top-right"
+              richColors
+              closeButton
+              toastOptions={{
+                classNames: {
+                  toast:
+                    '!rounded-[var(--radius-md)] !border-border !bg-surface !text-foreground !shadow-[var(--shadow-md)]',
+                },
+              }}
+            />
+            {import.meta.env.DEV ? (
+              <ReactQueryDevtools initialIsOpen={false} />
+            ) : null}
+          </QueryClientProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   )
 }

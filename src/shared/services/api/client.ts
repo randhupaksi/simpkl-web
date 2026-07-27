@@ -3,7 +3,12 @@ import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import { API_CONFIG } from './config'
 import { normalizeApiError } from './normalize-error'
 import { useAuthStore } from '@/features/auth/hooks/use-auth-store'
-import type { AuthTokens } from '@/features/auth/types/auth'
+import type {
+  AuthResultPayload,
+  AuthTokens,
+  AuthUser,
+} from '@/features/auth/types/auth'
+import { mapAuthTokens, mapAuthUser } from '@/features/auth/utils'
 import type { ApiResponse } from '@/shared/types/api'
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
@@ -16,19 +21,24 @@ export const apiClient = axios.create({
   ...API_CONFIG,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json',
   },
 })
 
-let refreshRequest: Promise<AuthTokens> | null = null
+let refreshRequest: Promise<{
+  tokens: AuthTokens
+  user: AuthUser
+}> | null = null
 
 async function refreshTokens(refreshToken: string) {
   if (!refreshRequest) {
     refreshRequest = refreshClient
-      .post<ApiResponse<AuthTokens>>('/auth/refresh', {
+      .post<ApiResponse<AuthResultPayload>>('/auth/refresh', {
         refresh_token: refreshToken,
       })
-      .then((response) => response.data.data)
+      .then((response) => ({
+        tokens: mapAuthTokens(response.data.data.tokens),
+        user: mapAuthUser(response.data.data.user),
+      }))
       .finally(() => {
         refreshRequest = null
       })
@@ -67,14 +77,24 @@ apiClient.interceptors.response.use(
       request._retry = true
 
       try {
-        const tokens = await refreshTokens(session.tokens.refreshToken)
-        session.setTokens(tokens)
-        request.headers.Authorization = `Bearer ${tokens.accessToken}`
+        const refreshed = await refreshTokens(session.tokens.refreshToken)
+        session.setSession(refreshed.user, refreshed.tokens)
+        request.headers.Authorization = `Bearer ${refreshed.tokens.accessToken}`
 
         return apiClient(request)
       } catch (refreshError) {
         session.clearSession()
+        if (!window.location.pathname.startsWith('/auth/login')) {
+          window.location.assign('/auth/login')
+        }
         return Promise.reject(normalizeApiError(refreshError))
+      }
+    }
+
+    if (status === 401 && !isAuthRequest) {
+      session.clearSession()
+      if (!window.location.pathname.startsWith('/auth/login')) {
+        window.location.assign('/auth/login')
       }
     }
 

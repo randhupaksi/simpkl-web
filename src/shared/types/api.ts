@@ -10,14 +10,14 @@ export interface ApiResponse<T> {
   success: boolean
   message: string
   data: T
-  meta: unknown
+  meta: unknown | null
 }
 
 export interface PaginatedMeta {
   page: number
-  perPage: number
+  per_page: number
   total: number
-  totalPages: number
+  total_pages: number
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
