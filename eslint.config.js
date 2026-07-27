@@ -27,4 +27,22 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    files: [
+      'src/shared/components/ui/**/*.{ts,tsx}',
+      'src/app/providers/theme-provider.tsx',
+      'src/features/documents/components/document-table.tsx',
+    ],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+  {
+    files: ['src/shared/components/tables/data-table.tsx'],
+    rules: {
+      // TanStack Table intentionally returns a stateful API that the React
+      // Compiler cannot memoize; this does not affect runtime correctness.
+      'react-hooks/incompatible-library': 'off',
+    },
+  },
 )
