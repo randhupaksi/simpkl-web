@@ -1,0 +1,111 @@
+@utility content-shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 96rem;
+}
+
+@utility focus-ring {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+  border-color: var(--focus-ring);
+}
+
+@utility tap-target {
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+@utility scrollbar-subtle {
+  scrollbar-color: var(--border-strong) transparent;
+  scrollbar-width: thin;
+}
+
+[data-density='compact'] {
+  --control-md: 2.25rem;
+  --table-cell-padding-y: 0.625rem;
+}
+
+[data-motion='reduced'] *,
+[data-motion='reduced'] *::before,
+[data-motion='reduced'] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+@utility interactive-surface {
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-instant) var(--ease-standard);
+}
+
+@utility pressed-feedback {
+  &:active:not(:disabled) {
+    transform: translateY(1px) scale(0.99);
+  }
+}
+
+@utility enter-animation {
+  animation: enter var(--duration-normal) var(--ease-enter);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.auth-visual::before {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  background:
+    radial-gradient(
+      circle at 12% 18%,
+      color-mix(in srgb, var(--sidebar-active) 24%, transparent),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 82% 76%,
+      color-mix(in srgb, var(--info) 18%, transparent),
+      transparent 38%
+    );
+}
+
+.auth-visual::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(var(--sidebar-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sidebar-border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black 18%,
+    black 80%,
+    transparent
+  );
+}

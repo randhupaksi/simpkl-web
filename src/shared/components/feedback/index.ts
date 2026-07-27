@@ -1,2 +1,5 @@
 export { AppErrorFallback } from './app-error-fallback'
+export { CapabilityNotice } from './capability-notice'
+export { ContractPage } from './contract-page'
 export { PageLoader } from './page-loader'
+export * from './state-panel'
