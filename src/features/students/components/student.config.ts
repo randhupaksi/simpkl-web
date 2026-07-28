@@ -1,0 +1,107 @@
+import { studentSchema } from '../schemas/student.schema'
+import { API_ENDPOINTS } from '@/shared/constants'
+import type { ResourceConfig } from '@/shared/components/forms'
+import type { Student } from '@/shared/types'
+
+export const studentConfig: ResourceConfig<Student> = {
+  name: 'Siswa',
+  namePlural: 'Siswa',
+  endpoint: API_ENDPOINTS.students,
+  queryKey: 'students',
+  description:
+    'Kelola identitas siswa, relasi kelas dan jurusan, serta status administrasi PKL.',
+  searchPlaceholder: 'Cari NIS atau nama siswa…',
+  emptyDescription:
+    'Tambahkan siswa secara manual atau gunakan impor Excel untuk data dalam jumlah besar.',
+  schema: studentSchema,
+  getDisplayName: (item) => item.name,
+  tableFields: [
+    { key: 'nis', label: 'NIS' },
+    { key: 'name', label: 'Nama siswa' },
+    { key: 'cohort', label: 'Angkatan', format: 'number' },
+    { key: 'pkl_status', label: 'Status PKL', format: 'status' },
+  ],
+  fields: [
+    { key: 'nis', label: 'NIS', required: true },
+    { key: 'nisn', label: 'NISN' },
+    { key: 'name', label: 'Nama lengkap', required: true },
+    { key: 'nickname', label: 'Nama panggilan' },
+    {
+      key: 'gender',
+      label: 'Jenis kelamin',
+      type: 'select',
+      required: true,
+      options: [
+        { value: 'male', label: 'Laki-laki' },
+        { value: 'female', label: 'Perempuan' },
+      ],
+    },
+    {
+      key: 'major_id',
+      label: 'Jurusan',
+      required: true,
+      optionsEndpoint: API_ENDPOINTS.majors,
+      placeholder: 'Pilih jurusan',
+    },
+    {
+      key: 'class_id',
+      label: 'Kelas',
+      required: true,
+      optionsEndpoint: API_ENDPOINTS.classes,
+      placeholder: 'Pilih kelas',
+    },
+    {
+      key: 'cohort',
+      label: 'Angkatan',
+      type: 'number',
+      required: true,
+      defaultValue: new Date().getFullYear(),
+    },
+    { key: 'phone', label: 'Nomor telepon', type: 'text' },
+    { key: 'email', label: 'Email', type: 'email' },
+    { key: 'parent_name', label: 'Nama orang tua/wali' },
+    { key: 'parent_phone', label: 'Telepon orang tua/wali' },
+    {
+      key: 'status',
+      label: 'Status siswa',
+      type: 'select',
+      required: true,
+      defaultValue: 'active',
+      options: [
+        { value: 'active', label: 'Aktif' },
+        { value: 'inactive', label: 'Tidak aktif' },
+        { value: 'graduated', label: 'Lulus' },
+        { value: 'transferred', label: 'Pindah' },
+        { value: 'withdrawn', label: 'Mengundurkan diri' },
+      ],
+    },
+    {
+      key: 'pkl_status',
+      label: 'Status PKL',
+      type: 'select',
+      required: true,
+      defaultValue: 'unplaced',
+      options: [
+        { value: 'unplaced', label: 'Belum ditempatkan' },
+        { value: 'placement_process', label: 'Proses penempatan' },
+        { value: 'placed', label: 'Sudah ditempatkan' },
+        { value: 'ready', label: 'Siap PKL' },
+        { value: 'active', label: 'Sedang PKL' },
+        { value: 'completed', label: 'Selesai' },
+        { value: 'cancelled', label: 'Dibatalkan' },
+      ],
+    },
+    {
+      key: 'address',
+      label: 'Alamat',
+      type: 'textarea',
+      className: 'sm:col-span-2',
+    },
+    {
+      key: 'notes',
+      label: 'Catatan internal',
+      type: 'textarea',
+      className: 'sm:col-span-2',
+    },
+  ],
+}
