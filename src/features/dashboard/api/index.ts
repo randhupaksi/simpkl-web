@@ -1,1 +1,2 @@
-export { DASHBOARD_MOCK } from './dashboard.mock'
+export * from './dashboard.keys'
+export * from './dashboard.queries'

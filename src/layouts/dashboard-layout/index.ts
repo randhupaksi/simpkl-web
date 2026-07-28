@@ -1,1 +1,5 @@
 export { DashboardLayout } from './dashboard-layout'
+export { DashboardBreadcrumb } from './dashboard-breadcrumb'
+export { DashboardHeader } from './dashboard-header'
+export { DashboardSidebar } from './dashboard-sidebar'
+export { MobileNavigation } from './mobile-navigation'

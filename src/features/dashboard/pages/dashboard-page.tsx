@@ -1,139 +1,272 @@
-import { ArrowRight, CalendarDays, Plus } from 'lucide-react'
+import {
+  AlertTriangle,
+  Building2,
+  CalendarClock,
+  CircleCheckBig,
+  FileWarning,
+  MapPin,
+  Timer,
+  UserRoundX,
+  Users,
+} from 'lucide-react'
+import { Link } from 'react-router-dom'
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip as ChartTooltip,
+} from 'recharts'
 
-import { DASHBOARD_MOCK } from '../api/dashboard.mock'
-import { cn } from '@/shared/lib/utils'
+import { useDashboardQuery } from '@/features/dashboard/api'
+import {
+  ErrorState,
+  LoadingState,
+  UnavailableState,
+} from '@/shared/components/feedback'
+import { StatCard } from '@/shared/components/data-display'
+import { Badge, Card, CardContent, CardHeader } from '@/shared/components/ui'
+import { PageHeader } from '@/shared/design-system/page'
+import { SectionTitle, Typography } from '@/shared/design-system/typography'
 
-const toneStyles = {
-  teal: 'bg-teal-50 text-teal-700',
-  blue: 'bg-blue-50 text-blue-700',
-  violet: 'bg-violet-50 text-violet-700',
-  amber: 'bg-amber-50 text-amber-700',
-} as const
+const chartColors = [
+  'var(--chart-1)',
+  'var(--chart-2)',
+  'var(--chart-4)',
+] as const
 
 export function DashboardPage() {
+  const query = useDashboardQuery()
+
+  if (query.isPending) return <LoadingState label="Memuat ringkasan PKL…" />
+  if (query.isError) {
+    return (
+      <ErrorState
+        message="Ringkasan dashboard tidak dapat dimuat."
+        onRetry={() => void query.refetch()}
+      />
+    )
+  }
+
+  const summary = query.data
+  const placementChart = [
+    { name: 'Sudah ditempatkan', value: summary.placed_students },
+    { name: 'Belum ditempatkan', value: summary.unplaced_students },
+    { name: 'Sedang PKL', value: summary.active_placements },
+  ]
+  const actions = [
+    {
+      label: 'Siswa belum ditempatkan',
+      value: summary.unplaced_students,
+      path: '/students',
+      icon: UserRoundX,
+      tone: 'warning' as const,
+    },
+    {
+      label: 'Dokumen belum lengkap',
+      value: summary.incomplete_documents,
+      path: '/documents',
+      icon: FileWarning,
+      tone: 'danger' as const,
+    },
+    {
+      label: 'PKL segera dimulai',
+      value: summary.starting_soon,
+      path: '/periods',
+      icon: CalendarClock,
+      tone: 'info' as const,
+    },
+    {
+      label: 'PKL segera berakhir',
+      value: summary.ending_soon,
+      path: '/placements',
+      icon: Timer,
+      tone: 'warning' as const,
+    },
+  ].filter((item) => item.value > 0)
+
   return (
-    <div className="mx-auto max-w-[1500px]">
-      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-medium text-teal-700">
-            Tahun ajaran 2026/2027
-          </p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight">
-            Ringkasan PKL
-          </h1>
-          <p className="mt-2 text-sm text-slate-600">
-            Pantau kesiapan administrasi dan progres penempatan peserta.
-          </p>
-        </div>
-        <button
-          type="button"
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-semibold text-white hover:bg-slate-800"
-        >
-          <Plus className="size-4" />
-          Tambah periode
-        </button>
-      </header>
+    <div className="enter-animation space-y-6">
+      <PageHeader
+        eyebrow="Ringkasan operasional"
+        title="Dashboard PKL"
+        description="Pantau penempatan, kesiapan administrasi, dan agenda penting berdasarkan data backend terbaru."
+      />
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {DASHBOARD_MOCK.metrics.map((metric) => {
-          const Icon = metric.icon
-          return (
-            <article
-              key={metric.label}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <div
-                className={cn(
-                  'grid size-11 place-items-center rounded-xl',
-                  toneStyles[metric.tone],
-                )}
-              >
-                <Icon className="size-5" />
-              </div>
-              <p className="mt-5 text-sm font-medium text-slate-500">
-                {metric.label}
-              </p>
-              <p className="mt-1 text-3xl font-semibold tracking-tight">
-                {metric.value}
-              </p>
-              <p className="mt-2 text-xs leading-5 text-slate-500">
-                {metric.description}
-              </p>
-            </article>
-          )
-        })}
+      <section
+        className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+        aria-label="Statistik utama"
+      >
+        <StatCard
+          label="Total peserta PKL"
+          value={summary.total_students}
+          icon={Users}
+          tone="primary"
+        />
+        <StatCard
+          label="Sudah ditempatkan"
+          value={summary.placed_students}
+          icon={MapPin}
+          tone="info"
+          description={
+            summary.total_students > 0
+              ? `${Math.round((summary.placed_students / summary.total_students) * 100)}% dari peserta`
+              : 'Belum ada peserta'
+          }
+        />
+        <StatCard
+          label="Sedang PKL"
+          value={summary.active_placements}
+          icon={CircleCheckBig}
+          tone="success"
+        />
+        <StatCard
+          label="Perusahaan aktif"
+          value={summary.active_companies}
+          icon={Building2}
+          tone="neutral"
+        />
+        <StatCard
+          label="Belum ditempatkan"
+          value={summary.unplaced_students}
+          icon={UserRoundX}
+          tone="warning"
+        />
+        <StatCard
+          label="Dokumen belum lengkap"
+          value={summary.incomplete_documents}
+          icon={FileWarning}
+          tone="danger"
+        />
+        <StatCard
+          label="Segera dimulai"
+          value={summary.starting_soon}
+          icon={CalendarClock}
+          tone="info"
+        />
+        <StatCard
+          label="Segera berakhir"
+          value={summary.ending_soon}
+          icon={Timer}
+          tone="warning"
+        />
       </section>
 
-      <section className="mt-6 grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="font-semibold">Timeline periode aktif</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                PKL semester ganjil 2026/2027
-              </p>
-            </div>
-            <CalendarDays className="size-5 text-slate-400" />
-          </div>
-          <div className="mt-8">
-            <div className="mb-3 flex justify-between text-xs font-medium text-slate-500">
-              <span>Persiapan</span>
-              <span>Pelaksanaan</span>
-              <span>Evaluasi</span>
-            </div>
-            <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-              <div className="h-full w-[64%] rounded-full bg-teal-500" />
-            </div>
-            <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl bg-slate-50 p-4">
-              <div>
-                <p className="text-xs text-slate-500">Mulai PKL</p>
-                <p className="mt-1 text-sm font-semibold">13 Juli 2026</p>
-              </div>
-              <div>
-                <p className="text-xs text-slate-500">Selesai PKL</p>
-                <p className="mt-1 text-sm font-semibold">18 Desember 2026</p>
-              </div>
-            </div>
-          </div>
-        </article>
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)]">
+        <Card>
+          <CardHeader>
+            <SectionTitle>Status penempatan</SectionTitle>
+            <Typography variant="muted" className="mt-1">
+              Distribusi peserta berdasarkan ringkasan penempatan.
+            </Typography>
+          </CardHeader>
+          <CardContent className="h-80">
+            {summary.total_students === 0 ? (
+              <UnavailableState feature="Grafik status penempatan" />
+            ) : (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={placementChart}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={62}
+                    outerRadius={96}
+                    paddingAngle={3}
+                    stroke="var(--surface)"
+                    strokeWidth={3}
+                  >
+                    {placementChart.map((item, index) => (
+                      <Cell
+                        key={item.name}
+                        fill={chartColors[index % chartColors.length]}
+                      />
+                    ))}
+                  </Pie>
+                  <ChartTooltip
+                    contentStyle={{
+                      borderRadius: 'var(--radius-md)',
+                      borderColor: 'var(--border)',
+                      background: 'var(--surface)',
+                      boxShadow: 'var(--shadow-md)',
+                    }}
+                  />
+                  <Legend
+                    iconType="circle"
+                    wrapperStyle={{ fontSize: '12px' }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            )}
+          </CardContent>
+        </Card>
 
-        <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
+        <Card>
+          <CardHeader className="flex flex-row items-start justify-between gap-4">
             <div>
-              <h2 className="font-semibold">Perlu tindakan</h2>
-              <p className="mt-1 text-sm text-slate-500">
-                Prioritas administrasi saat ini
-              </p>
+              <SectionTitle>Perlu tindakan</SectionTitle>
+              <Typography variant="muted" className="mt-1">
+                Prioritas administrasi saat ini.
+              </Typography>
             </div>
-            <span className="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-semibold text-rose-700">
-              2 prioritas
-            </span>
-          </div>
-          <div className="mt-5 space-y-3">
-            {DASHBOARD_MOCK.actions.map((action) => {
-              const Icon = action.icon
-              return (
-                <button
-                  key={action.title}
-                  type="button"
-                  className="flex w-full items-start gap-3 rounded-xl border border-slate-200 p-4 text-left hover:border-slate-300 hover:bg-slate-50"
-                >
-                  <Icon className="mt-0.5 size-5 shrink-0 text-amber-600" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold">
-                      {action.title}
-                    </span>
-                    <span className="mt-1 block text-xs leading-5 text-slate-500">
-                      {action.detail}
-                    </span>
-                  </span>
-                  <ArrowRight className="mt-1 size-4 shrink-0 text-slate-400" />
-                </button>
-              )
-            })}
-          </div>
-        </article>
+            <Badge tone={actions.length > 0 ? 'danger' : 'success'}>
+              {actions.length} prioritas
+            </Badge>
+          </CardHeader>
+          <CardContent>
+            {actions.length === 0 ? (
+              <div className="grid min-h-56 place-items-center text-center">
+                <div>
+                  <CircleCheckBig className="text-success mx-auto size-9" />
+                  <p className="mt-3 text-sm font-semibold">
+                    Tidak ada tindakan mendesak
+                  </p>
+                  <Typography variant="caption" className="mt-1">
+                    Semua indikator prioritas berada dalam kondisi baik.
+                  </Typography>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {actions.map((action) => {
+                  const Icon = action.icon
+                  return (
+                    <Link
+                      key={action.label}
+                      to={action.path}
+                      className="interactive-surface pressed-feedback border-border hover:border-border-hover hover:bg-surface-hover active:bg-surface-pressed flex items-center gap-3 rounded-[var(--radius-md)] border p-3.5"
+                    >
+                      <span className="bg-warning-subtle text-warning grid size-9 place-items-center rounded-[var(--radius-sm)]">
+                        <Icon className="size-4" />
+                      </span>
+                      <span className="min-w-0 flex-1 text-sm font-medium">
+                        {action.label}
+                      </span>
+                      <Badge tone={action.tone}>{action.value}</Badge>
+                    </Link>
+                  )
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </section>
+
+      <Card variant="subtle">
+        <CardContent className="flex items-start gap-3">
+          <AlertTriangle className="text-info mt-0.5 size-5 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold">
+              Grafik siswa per jurusan dan aktivitas terbaru
+            </p>
+            <Typography variant="caption" className="mt-1">
+              Belum ditampilkan karena kontrak OpenAPI belum menyediakan
+              breakdown per jurusan maupun endpoint aktivitas.
+            </Typography>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
