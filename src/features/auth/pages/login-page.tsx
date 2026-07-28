@@ -1,81 +1,138 @@
-import { Eye, LockKeyhole, Mail } from 'lucide-react'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { LockKeyhole, LogIn, UserRound } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
+import { useLoginMutation } from '@/features/auth/api'
+import { loginSchema, type LoginInput } from '@/features/auth/schemas'
+import { useAuthStore } from '@/features/auth/hooks/use-auth-store'
 import { ROUTE_PATHS } from '@/app/router'
+import { Button, Input, PasswordInput } from '@/shared/components/ui'
+import { FormField } from '@/shared/design-system/form'
+import { PageTitle, Typography } from '@/shared/design-system/typography'
+import type { ApiError } from '@/shared/types/api'
+
+type LoginLocationState = {
+  from?: string
+}
 
 export function LoginPage() {
-  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isAuthenticated = useAuthStore((state) =>
+    Boolean(state.tokens?.accessToken),
+  )
+  const loginMutation = useLoginMutation()
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { login: '', password: '' },
+  })
+
+  if (isAuthenticated) {
+    return <Navigate to={ROUTE_PATHS.dashboard} replace />
+  }
+
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      await loginMutation.mutateAsync(values)
+      toast.success('Login berhasil', {
+        description: 'Selamat datang di SIMPKL Citra Negara.',
+      })
+      const state = location.state as LoginLocationState | null
+      navigate(state?.from ?? ROUTE_PATHS.dashboard, { replace: true })
+    } catch (error) {
+      const apiError = error as ApiError
+      if (apiError.errors) {
+        for (const [field, messages] of Object.entries(apiError.errors)) {
+          if (field === 'login' || field === 'password') {
+            setError(field, { message: messages[0] })
+          }
+        }
+      }
+    }
+  })
 
   return (
-    <div className="w-full max-w-md">
+    <div className="enter-animation w-full max-w-md">
       <div className="mb-8 lg:hidden">
-        <p className="text-lg font-semibold">SIMPKL Citra Negara</p>
-        <p className="text-sm text-slate-500">Back-office pengelolaan PKL</p>
+        <Typography as="p" variant="sectionTitle">
+          SIMPKL Citra Negara
+        </Typography>
+        <Typography variant="caption">
+          Pusat administrasi Praktik Kerja Lapangan
+        </Typography>
       </div>
-      <p className="text-sm font-semibold text-teal-700">
-        Selamat datang kembali
-      </p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-        Masuk ke akun staf
-      </h1>
-      <p className="mt-3 text-sm leading-6 text-slate-600">
-        Gunakan akun sekolah untuk mengakses sistem pengelolaan PKL.
-      </p>
+      <Typography variant="overline">Portal staf sekolah</Typography>
+      <PageTitle className="mt-2">Selamat datang kembali</PageTitle>
+      <Typography variant="muted" className="mt-3 max-w-sm">
+        Masuk menggunakan akun internal untuk mengelola administrasi PKL secara
+        aman dan terpusat.
+      </Typography>
 
-      <form className="mt-8 space-y-5">
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">
-            Email
-          </span>
-          <span className="relative block">
-            <Mail className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-400" />
-            <input
-              type="email"
-              autoComplete="email"
-              placeholder="nama@smkcitranegara.sch.id"
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white pr-4 pl-10 text-sm outline-none focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10"
-            />
-          </span>
-        </label>
-        <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">
-            Password
-          </span>
-          <span className="relative block">
-            <LockKeyhole className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-slate-400" />
-            <input
-              type={showPassword ? 'text' : 'password'}
-              autoComplete="current-password"
-              placeholder="Masukkan password"
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white pr-12 pl-10 text-sm outline-none focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10"
-            />
-            <button
-              type="button"
-              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-              aria-label={
-                showPassword ? 'Sembunyikan password' : 'Tampilkan password'
-              }
-              onClick={() => setShowPassword((current) => !current)}
-            >
-              <Eye className="size-4" />
-            </button>
-          </span>
-        </label>
-        <div className="flex items-center justify-between gap-4 text-sm">
-          <label className="flex items-center gap-2 text-slate-600">
-            <input type="checkbox" className="size-4 accent-teal-600" />
-            Ingat saya
-          </label>
-          <span className="text-slate-500">Hubungi administrator</span>
-        </div>
-        <Link
-          to={ROUTE_PATHS.dashboard}
-          className="flex h-12 w-full items-center justify-center rounded-xl bg-slate-950 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+      <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
+        <FormField
+          id="login"
+          label="Email atau username"
+          error={errors.login?.message}
+          required
         >
-          Masuk
-        </Link>
+          <Input
+            id="login"
+            autoComplete="username"
+            placeholder="Masukkan email atau username"
+            startIcon={<UserRound />}
+            invalid={Boolean(errors.login)}
+            aria-describedby={errors.login ? 'login-error' : undefined}
+            {...register('login')}
+          />
+        </FormField>
+        <FormField
+          id="password"
+          label="Password"
+          error={errors.password?.message}
+          required
+        >
+          <PasswordInput
+            id="password"
+            autoComplete="current-password"
+            placeholder="Masukkan password"
+            startIcon={<LockKeyhole />}
+            invalid={Boolean(errors.password)}
+            aria-describedby={errors.password ? 'password-error' : undefined}
+            {...register('password')}
+          />
+        </FormField>
+
+        {loginMutation.error ? (
+          <div
+            role="alert"
+            className="border-danger-border bg-danger-subtle text-danger rounded-[var(--radius-md)] border px-4 py-3 text-sm"
+          >
+            {(loginMutation.error as unknown as ApiError).message}
+          </div>
+        ) : null}
+
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full"
+          isLoading={loginMutation.isPending}
+          loadingText="Memverifikasi akun…"
+          startIcon={<LogIn />}
+        >
+          Masuk ke SIMPKL
+        </Button>
       </form>
+
+      <Typography variant="caption" className="mt-6 text-center">
+        Lupa akses akun? Hubungi administrator sistem sekolah.
+      </Typography>
     </div>
   )
 }
