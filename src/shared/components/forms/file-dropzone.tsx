@@ -70,7 +70,7 @@ export function FileDropzone({
       <div
         {...getRootProps()}
         className={cn(
-          'interactive-surface border-border-strong bg-surface-subtle hover:border-border-hover hover:bg-surface-hover active:bg-surface-pressed focus-visible:border-border-selected grid min-h-44 cursor-pointer place-items-center rounded-[var(--radius-lg)] border border-dashed p-6 text-center outline-none focus-visible:shadow-[var(--shadow-focus)]',
+          'interactive-surface border-border-strong bg-surface-subtle hover:border-border-form-hover hover:bg-surface-hover active:bg-surface-pressed focus-visible:border-border-selected grid min-h-44 cursor-pointer place-items-center rounded-[var(--radius-lg)] border border-dashed p-6 text-center outline-none focus-visible:shadow-[var(--shadow-focus)]',
           isDragActive && 'border-border-selected bg-surface-selected',
           isDragReject && 'border-danger bg-danger-subtle',
           disabled &&

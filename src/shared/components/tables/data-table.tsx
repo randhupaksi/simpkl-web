@@ -93,7 +93,11 @@ export function DataTable<TData>({
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" startIcon={<Columns3 />}>
+            <Button
+              variant="outline"
+              startIcon={<Columns3 />}
+              className="hover:border-border-form-hover data-[state=open]:border-border-selected data-[state=open]:shadow-[var(--shadow-focus)]"
+            >
               Kolom
             </Button>
           </DropdownMenuTrigger>

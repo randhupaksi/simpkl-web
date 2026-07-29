@@ -43,8 +43,9 @@ export function Select({
         aria-label={ariaLabel}
         aria-invalid={invalid || undefined}
         className={cn(
-          'interactive-surface border-border-strong bg-surface text-foreground hover:border-border-hover focus:border-border-selected data-[placeholder]:text-muted-foreground disabled:border-border-disabled disabled:bg-surface-disabled disabled:text-disabled-foreground flex h-[var(--control-md)] w-full items-center justify-between gap-3 rounded-[var(--radius-md)] border px-3.5 text-sm shadow-[var(--shadow-xs)] outline-none focus:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
-          invalid && 'border-danger hover:border-danger focus:border-danger',
+          'interactive-surface border-border-strong bg-surface text-foreground hover:border-border-form-hover focus-visible:border-border-selected data-[state=open]:border-border-selected data-[placeholder]:text-muted-foreground disabled:border-border-disabled disabled:bg-surface-disabled disabled:text-disabled-foreground flex h-[var(--control-md)] w-full items-center justify-between gap-3 rounded-[var(--radius-md)] border px-3.5 text-sm shadow-[var(--shadow-xs)] outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed data-[state=open]:shadow-[var(--shadow-focus)]',
+          invalid &&
+            'border-danger hover:border-danger focus-visible:border-danger data-[state=open]:border-danger data-[state=open]:shadow-[0_0_0_3px_color-mix(in_srgb,var(--danger)_18%,transparent)]',
           className,
         )}
       >

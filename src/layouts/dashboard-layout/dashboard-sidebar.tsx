@@ -37,20 +37,21 @@ export function DashboardSidebar({
     >
       <div
         className={cn(
-          'border-sidebar-border flex h-[var(--header-height)] items-center border-b',
+          'border-sidebar-border flex h-[5.25rem] items-center border-b',
           collapsed ? 'justify-center px-2' : 'px-5',
         )}
       >
         <div className="flex min-w-0 items-center gap-3">
-          <span className="bg-sidebar-active text-sidebar-active-foreground grid size-10 shrink-0 place-items-center rounded-[var(--radius-md)]">
-            <School className="size-5" />
+          <span className="bg-sidebar-active text-sidebar-active-foreground relative grid size-11 shrink-0 place-items-center rounded-[var(--radius-lg)] shadow-[0_8px_20px_rgb(20_159_145_/_0.2)]">
+            <School className="size-[1.35rem]" />
+            <span className="border-sidebar-background absolute right-0.5 bottom-0.5 size-2 rounded-full border-2 bg-[#8de0c0]" />
           </span>
           {!collapsed ? (
             <div className="min-w-0">
-              <p className="text-inverse-foreground truncate text-sm font-bold">
+              <p className="text-inverse-foreground truncate text-[0.9375rem] font-bold tracking-[-0.02em]">
                 SIMPKL
               </p>
-              <p className="text-sidebar-muted truncate text-[0.6875rem]">
+              <p className="text-sidebar-muted mt-0.5 truncate text-[0.6875rem] tracking-wide">
                 SMK Citra Negara
               </p>
             </div>
@@ -58,8 +59,8 @@ export function DashboardSidebar({
         </div>
       </div>
 
-      <nav className="scrollbar-subtle flex-1 overflow-y-auto px-3 py-5">
-        <div className="space-y-6">
+      <nav className="scrollbar-subtle flex-1 overflow-y-auto px-3.5 py-6">
+        <div className="space-y-7">
           {NAVIGATION_GROUPS.map((group) => {
             const visibleItems = group.items.filter((item) =>
               hasPermission(
@@ -72,11 +73,11 @@ export function DashboardSidebar({
             return (
               <section key={group.label}>
                 {!collapsed ? (
-                  <p className="text-sidebar-muted mb-2 px-3 text-[0.625rem] font-bold tracking-[0.14em] uppercase">
+                  <p className="text-sidebar-muted mb-2.5 px-3 text-[0.625rem] font-bold tracking-[0.18em] uppercase">
                     {group.label}
                   </p>
                 ) : null}
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {visibleItems.map((item) => {
                     const Icon = item.icon
                     const link = (
@@ -85,10 +86,10 @@ export function DashboardSidebar({
                         onClick={onNavigate}
                         className={({ isActive }) =>
                           cn(
-                            'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
-                            collapsed ? 'justify-center px-2' : 'gap-3 px-3',
+                            'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] border-l-2 border-transparent text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
+                            collapsed ? 'justify-center px-2' : 'gap-3 px-3.5',
                             isActive &&
-                              'bg-sidebar-active text-sidebar-active-foreground hover:bg-sidebar-active active:bg-sidebar-active shadow-[var(--shadow-sm)]',
+                              'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]',
                           )
                         }
                       >

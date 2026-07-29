@@ -50,7 +50,7 @@ export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
   }
 
   return (
-    <header className="border-border bg-surface/95 sticky top-0 z-[var(--z-sticky)] flex h-[var(--header-height)] items-center gap-3 border-b px-4 backdrop-blur sm:px-6">
+    <header className="border-border bg-surface/95 sticky top-0 z-[var(--z-sticky)] flex h-[5.25rem] items-center gap-4 border-b px-4 backdrop-blur sm:px-7">
       <IconButton
         aria-label="Buka navigasi"
         variant="outline"
@@ -68,13 +68,18 @@ export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
             startIcon={<Search />}
             placeholder="Cari siswa atau perusahaan…"
             aria-label="Pencarian cepat"
-            className="bg-surface-subtle w-72"
+            className="bg-surface-subtle placeholder:text-muted-foreground/80 focus:bg-surface h-11 w-[21rem] rounded-[var(--radius-lg)] shadow-none"
           />
         </div>
         <Tooltip>
           <TooltipTrigger asChild>
-            <IconButton aria-label="Notifikasi" variant="ghost">
+            <IconButton
+              aria-label="Notifikasi"
+              variant="ghost"
+              className="text-muted-foreground hover:text-foreground relative"
+            >
               <Bell />
+              <span className="bg-sidebar-active absolute top-2 right-2 size-1.5 rounded-full" />
             </IconButton>
           </TooltipTrigger>
           <TooltipContent>Notifikasi</TooltipContent>
@@ -82,14 +87,17 @@ export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-11 gap-2 px-2">
-              <span className="bg-secondary-subtle text-secondary grid size-8 place-items-center rounded-[var(--radius-full)] text-xs font-bold">
+            <Button
+              variant="ghost"
+              className="border-border-subtle ml-1 h-11 gap-2 rounded-none border-l pr-1 pl-4"
+            >
+              <span className="bg-secondary-subtle text-secondary grid size-9 place-items-center rounded-[var(--radius-md)] text-xs font-bold">
                 {initials || 'ST'}
               </span>
               <span className="hidden max-w-36 truncate text-sm sm:block">
                 {user?.name ?? 'Staf sekolah'}
               </span>
-              <ChevronDown className="text-muted-foreground" />
+              <ChevronDown className="text-muted-foreground size-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-60">

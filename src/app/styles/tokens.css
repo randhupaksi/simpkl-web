@@ -77,6 +77,7 @@
   --border-subtle: #ebeff4;
   --border-strong: var(--neutral-300);
   --border-hover: var(--neutral-400);
+  --border-form-hover: var(--brand-500);
   --border-selected: var(--brand-600);
   --border-disabled: var(--neutral-200);
   --focus-ring: var(--brand-500);
@@ -216,6 +217,7 @@
   --color-border-subtle: var(--border-subtle);
   --color-border-strong: var(--border-strong);
   --color-border-hover: var(--border-hover);
+  --color-border-form-hover: var(--border-form-hover);
   --color-border-selected: var(--border-selected);
   --color-border-disabled: var(--border-disabled);
 

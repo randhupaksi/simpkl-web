@@ -25,7 +25,7 @@ export const RadioGroupItem = forwardRef<
   <RadioGroupPrimitive.Item
     ref={ref}
     className={cn(
-      'interactive-surface pressed-feedback border-border-strong bg-surface hover:border-border-hover focus-visible:border-border-selected data-[state=checked]:border-primary disabled:border-border-disabled disabled:bg-surface-disabled grid size-5 place-items-center rounded-[var(--radius-full)] border outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
+      'interactive-surface pressed-feedback border-border-strong bg-surface hover:border-border-form-hover focus-visible:border-border-selected data-[state=checked]:border-primary disabled:border-border-disabled disabled:bg-surface-disabled grid size-5 place-items-center rounded-[var(--radius-full)] border outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
       className,
     )}
     {...props}

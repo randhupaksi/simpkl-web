@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         ref={ref}
         aria-invalid={invalid || undefined}
         className={cn(
-          'interactive-surface border-border-strong bg-surface text-foreground placeholder:text-muted-foreground hover:border-border-hover focus:border-border-selected disabled:border-border-disabled disabled:bg-surface-disabled disabled:text-disabled-foreground h-[var(--control-md)] w-full rounded-[var(--radius-md)] border px-3.5 text-sm shadow-[var(--shadow-xs)] outline-none focus:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
+          'interactive-surface border-border-strong bg-surface text-foreground placeholder:text-muted-foreground hover:border-border-form-hover focus:border-border-selected disabled:border-border-disabled disabled:bg-surface-disabled disabled:text-disabled-foreground h-[var(--control-md)] w-full rounded-[var(--radius-md)] border px-3.5 text-sm shadow-[var(--shadow-xs)] outline-none focus:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
           startIcon && 'pl-10',
           endAdornment && 'pr-11',
           invalid &&
