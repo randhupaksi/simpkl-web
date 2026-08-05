@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DatePicker,
   Input,
   Select,
   Textarea,
@@ -146,6 +147,7 @@ export function DocumentUploadDialog() {
                     value={field.value}
                     onValueChange={field.onChange}
                     options={ownerOptions}
+                    placeholder="Pilih jenis pemilik"
                     ariaLabel="Jenis pemilik dokumen"
                   />
                 </FormField>
@@ -220,19 +222,28 @@ export function DocumentUploadDialog() {
                 {...register('number')}
               />
             </FormField>
-            <FormField id="issued_at" label="Tanggal terbit">
-              <Input id="issued_at" type="date" {...register('issued_at')} />
-            </FormField>
-            <FormField id="valid_from" label="Berlaku mulai">
-              <Input id="valid_from" type="date" {...register('valid_from')} />
-            </FormField>
-            <FormField id="valid_until" label="Berlaku hingga">
-              <Input
-                id="valid_until"
-                type="date"
-                {...register('valid_until')}
+            {([
+              ['issued_at', 'Tanggal terbit', 'Pilih tanggal terbit'],
+              ['valid_from', 'Berlaku mulai', 'Pilih tanggal mulai berlaku'],
+              ['valid_until', 'Berlaku hingga', 'Pilih tanggal akhir berlaku'],
+            ] as const).map(([name, label, placeholder]) => (
+              <Controller
+                key={name}
+                control={control}
+                name={name}
+                render={({ field }) => (
+                  <FormField id={name} label={label} error={errors[name]?.message}>
+                    <DatePicker
+                      id={name}
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder={placeholder}
+                      invalid={Boolean(errors[name])}
+                    />
+                  </FormField>
+                )}
               />
-            </FormField>
+            ))}
           </div>
           <FormField id="notes" label="Catatan" error={errors.notes?.message}>
             <Textarea

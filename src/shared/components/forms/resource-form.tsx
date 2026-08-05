@@ -5,7 +5,7 @@ import type { ZodType } from 'zod'
 
 import { ResourceSelectField } from './resource-select-field'
 import type { ResourceField, ResourceValues } from './resource-form.types'
-import { Input, Select, Switch, Textarea } from '@/shared/components/ui'
+import { DatePicker, Input, Select, Switch, Textarea } from '@/shared/components/ui'
 import { FormField } from '@/shared/design-system/form'
 
 type ResourceFormProps = {
@@ -120,7 +120,7 @@ function renderControl(
         onChange={onChange}
         labelKey={field.optionLabelKey}
         valueKey={field.optionValueKey}
-        placeholder={field.placeholder}
+        placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
         invalid={invalid}
       />
     )
@@ -132,7 +132,7 @@ function renderControl(
         value={typeof value === 'string' ? value : ''}
         onValueChange={onChange}
         options={field.options ?? []}
-        placeholder={field.placeholder}
+        placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
         invalid={invalid}
       />
     )
@@ -162,6 +162,19 @@ function renderControl(
     )
   }
 
+  if (field.type === 'date') {
+    return (
+      <DatePicker
+        id={id}
+        value={typeof value === 'string' ? value : ''}
+        onChange={onChange}
+        placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
+        aria-describedby={describedBy}
+        invalid={invalid}
+      />
+    )
+  }
+
   return (
     <Input
       id={id}
@@ -176,7 +189,7 @@ function renderControl(
             : event.target.value,
         )
       }
-      placeholder={field.placeholder}
+      placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
       aria-describedby={describedBy}
       invalid={invalid}
     />
@@ -184,3 +197,13 @@ function renderControl(
 }
 
 type ResourceValueForControl = string | number | boolean
+
+function getDefaultPlaceholder(field: ResourceField) {
+  const label = field.label.toLocaleLowerCase('id')
+
+  if (field.type === 'date') return `Pilih ${label}`
+  if (field.type === 'number') return `Masukkan ${label}`
+  if (field.type === 'select' || field.optionsEndpoint) return `Pilih ${label}`
+  if (field.type === 'textarea') return `Tulis ${label}…`
+  return `Masukkan ${label}`
+}
