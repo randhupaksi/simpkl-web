@@ -113,6 +113,7 @@ export function CompanyCapacityPanel({ companyId }: { companyId: string }) {
                   max={10000}
                   className="w-24"
                   value={values[major.id] ?? savedValues[major.id] ?? 0}
+                  placeholder="Masukkan kuota"
                   disabled={!canEdit}
                   aria-label={`Kuota ${major.name}`}
                   onChange={(event) =>

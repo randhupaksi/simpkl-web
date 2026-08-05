@@ -9,7 +9,18 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, startIcon, endAdornment, invalid, ...props }, ref) => (
+  (
+    {
+      className,
+      startIcon,
+      endAdornment,
+      invalid,
+      type = 'text',
+      placeholder,
+      ...props
+    },
+    ref,
+  ) => (
     <span className="relative block">
       {startIcon ? (
         <span className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 [&_svg]:size-4">
@@ -18,6 +29,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ) : null}
       <input
         ref={ref}
+        type={type}
+        placeholder={placeholder ?? defaultPlaceholder(type)}
         aria-invalid={invalid || undefined}
         className={cn(
           'interactive-surface border-border-strong bg-surface text-foreground placeholder:text-muted-foreground hover:border-border-form-hover focus:border-border-selected disabled:border-border-disabled disabled:bg-surface-disabled disabled:text-disabled-foreground h-[var(--control-md)] w-full rounded-[var(--radius-md)] border px-3.5 text-sm shadow-[var(--shadow-xs)] outline-none focus:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
@@ -37,5 +50,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     </span>
   ),
 )
+
+function defaultPlaceholder(type: InputHTMLAttributes<HTMLInputElement>['type']) {
+  if (type === 'date' || type === 'datetime-local') return 'Pilih tanggal'
+  if (type === 'number') return 'Masukkan angka'
+  if (type === 'email') return 'Masukkan email'
+  if (type === 'password') return 'Masukkan password'
+  return 'Masukkan data'
+}
 
 Input.displayName = 'Input'

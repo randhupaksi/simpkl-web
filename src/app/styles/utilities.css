@@ -16,7 +16,7 @@
 }
 
 @utility scrollbar-subtle {
-  scrollbar-color: var(--border-strong) transparent;
+  scrollbar-color: var(--brand-700) transparent;
   scrollbar-width: thin;
 }
 

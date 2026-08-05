@@ -39,7 +39,7 @@ export const DropdownMenuItem = forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      'interactive-surface data-[highlighted]:bg-surface-hover data-[disabled]:text-disabled-foreground [&_svg]:text-muted-foreground flex cursor-pointer items-center gap-2 rounded-[var(--radius-sm)] px-2.5 py-2 text-sm outline-none select-none data-[disabled]:pointer-events-none [&_svg]:size-4',
+      'interactive-surface data-[highlighted]:bg-primary-subtle data-[highlighted]:text-primary data-[disabled]:text-disabled-foreground [&_svg]:text-muted-foreground flex cursor-pointer items-center gap-2 rounded-[var(--radius-sm)] px-2.5 py-2 text-sm outline-none select-none data-[disabled]:pointer-events-none [&_svg]:size-4',
       destructive &&
         'text-danger data-[highlighted]:bg-danger-subtle [&_svg]:text-danger',
       className,
@@ -58,7 +58,7 @@ export const DropdownMenuCheckboxItem = forwardRef<
     ref={ref}
     checked={checked}
     className={cn(
-      'interactive-surface data-[highlighted]:bg-surface-hover relative flex cursor-pointer items-center rounded-[var(--radius-sm)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[state=checked]:font-medium',
+      'interactive-surface data-[highlighted]:bg-primary-subtle data-[highlighted]:text-primary relative flex cursor-pointer items-center rounded-[var(--radius-sm)] py-2 pr-2.5 pl-8 text-sm outline-none select-none data-[state=checked]:font-medium',
       className,
     )}
     {...props}
@@ -110,7 +110,7 @@ export const DropdownMenuSubTrigger = forwardRef<
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={cn(
-      'interactive-surface data-[highlighted]:bg-surface-hover data-[state=open]:bg-surface-hover flex cursor-pointer items-center rounded-[var(--radius-sm)] px-2.5 py-2 text-sm outline-none',
+      'interactive-surface data-[highlighted]:bg-primary-subtle data-[highlighted]:text-primary data-[state=open]:bg-primary-subtle flex cursor-pointer items-center rounded-[var(--radius-sm)] px-2.5 py-2 text-sm outline-none',
       className,
     )}
     {...props}

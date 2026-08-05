@@ -44,7 +44,7 @@ export function Combobox({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-between font-normal"
+          className="w-full justify-between font-normal hover:border-border-form-hover focus-visible:border-border-selected data-[state=open]:border-border-selected data-[state=open]:shadow-[var(--shadow-focus)]"
           disabled={disabled}
           aria-expanded={open}
           aria-haspopup="listbox"
@@ -85,7 +85,7 @@ export function Combobox({
                 role="option"
                 aria-selected={option.value === value}
                 disabled={option.disabled}
-                className="interactive-surface hover:bg-surface-hover active:bg-surface-pressed aria-selected:bg-surface-selected aria-selected:text-primary-pressed disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] px-3 py-2.5 text-left text-sm aria-selected:font-semibold"
+                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-selected:border-primary-subtle-hover aria-selected:bg-primary-subtle-hover aria-selected:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-selected:font-semibold"
                 onClick={() => {
                   onValueChange(option.value)
                   setOpen(false)
@@ -129,7 +129,7 @@ export function MultiSelect({
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          className="w-full justify-between font-normal"
+          className="w-full justify-between font-normal hover:border-border-form-hover focus-visible:border-border-selected data-[state=open]:border-border-selected data-[state=open]:shadow-[var(--shadow-focus)]"
           disabled={disabled}
           aria-expanded={open}
         >
@@ -159,7 +159,7 @@ export function MultiSelect({
                 type="button"
                 aria-pressed={isSelected}
                 disabled={option.disabled}
-                className="interactive-surface hover:bg-surface-hover active:bg-surface-pressed aria-pressed:bg-surface-selected aria-pressed:text-primary-pressed disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] px-3 py-2.5 text-left text-sm aria-pressed:font-semibold"
+                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-pressed:border-primary-subtle-hover aria-pressed:bg-primary-subtle-hover aria-pressed:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-pressed:font-semibold"
                 onClick={() =>
                   onValueChange(
                     isSelected
@@ -172,7 +172,7 @@ export function MultiSelect({
                   className={cn(
                     'grid size-4 place-items-center rounded-[var(--radius-xs)] border',
                     isSelected
-                      ? 'border-primary bg-primary text-primary-foreground'
+                      ? 'border-border-selected bg-primary-subtle-hover text-primary'
                       : 'border-border-strong',
                   )}
                 >

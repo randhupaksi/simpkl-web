@@ -77,10 +77,10 @@
   --border-subtle: #ebeff4;
   --border-strong: var(--neutral-300);
   --border-hover: var(--neutral-400);
-  --border-form-hover: var(--brand-500);
-  --border-selected: var(--brand-600);
+  --border-form-hover: var(--brand-400);
+  --border-selected: var(--brand-500);
   --border-disabled: var(--neutral-200);
-  --focus-ring: var(--brand-500);
+  --focus-ring: var(--brand-400);
   --focus-ring-offset: var(--neutral-0);
 
   /* Interactive */
@@ -88,7 +88,7 @@
   --primary-hover: var(--brand-700);
   --primary-pressed: var(--brand-800);
   --primary-subtle: var(--brand-50);
-  --primary-subtle-hover: var(--brand-100);
+  --primary-subtle-hover: var(--brand-200);
   --primary-foreground: var(--neutral-0);
   --secondary: #1d3858;
   --secondary-hover: #172e49;
@@ -156,7 +156,7 @@
   --shadow-md: 0 10px 28px rgb(15 23 42 / 0.08), 0 2px 8px rgb(15 23 42 / 0.04);
   --shadow-lg:
     0 24px 60px rgb(15 23 42 / 0.15), 0 8px 20px rgb(15 23 42 / 0.06);
-  --shadow-focus: 0 0 0 3px rgb(20 159 145 / 0.2);
+  --shadow-focus: 0 0 0 3px rgb(54 191 173 / 0.28);
 
   /* Spacing */
   --space-0: 0;
@@ -185,7 +185,7 @@
   --z-base: 0;
   --z-raised: 10;
   --z-sticky: 30;
-  --z-dropdown: 50;
+  --z-dropdown: 90;
   --z-overlay: 70;
   --z-dialog: 80;
   --z-toast: 100;

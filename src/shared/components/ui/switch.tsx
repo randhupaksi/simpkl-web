@@ -11,7 +11,7 @@ export const Switch = forwardRef<
   <SwitchPrimitive.Root
     ref={ref}
     className={cn(
-      'interactive-surface pressed-feedback border-border-strong bg-surface-muted hover:border-border-form-hover data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:hover:bg-primary-hover disabled:border-border-disabled disabled:bg-surface-disabled relative h-6 w-11 rounded-[var(--radius-full)] border outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
+      'interactive-surface pressed-feedback border-border-strong bg-surface-muted hover:border-border-form-hover data-[state=checked]:border-border-selected data-[state=checked]:bg-primary-subtle-hover data-[state=checked]:hover:bg-primary-subtle-hover disabled:border-border-disabled disabled:bg-surface-disabled relative h-6 w-11 rounded-[var(--radius-full)] border outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed',
       className,
     )}
     {...props}
