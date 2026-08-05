@@ -285,15 +285,20 @@ export function ResourceManagementPage<T extends BaseEntity>({
                 .filter((field) => field.type !== 'password')
                 .map((field) => ({
                   label: field.label,
-                  value: formatField(
-                    viewing[field.key as keyof T],
-                    field.type === 'date'
-                      ? 'date'
-                      : field.type === 'switch'
-                        ? 'boolean'
-                        : field.key === 'status'
-                          ? 'status'
-                          : undefined,
+                  value: (
+                    <ResourceFieldValue
+                      field={field}
+                      value={viewing[field.key as keyof T]}
+                      format={
+                        field.type === 'date'
+                          ? 'date'
+                          : field.type === 'switch'
+                            ? 'boolean'
+                            : field.key === 'status'
+                              ? 'status'
+                              : undefined
+                      }
+                    />
                   ),
                 }))}
             />
@@ -475,15 +480,20 @@ export function ResourceDetailPage<T extends BaseEntity>({
               .filter((field) => field.type !== 'password')
               .map((field) => ({
                 label: field.label,
-                value: formatField(
-                  query.data[field.key as keyof T],
-                  field.type === 'date'
-                    ? 'date'
-                    : field.type === 'switch'
-                      ? 'boolean'
-                      : field.key === 'status' || field.key === 'pkl_status'
-                        ? 'status'
-                        : undefined,
+                value: (
+                  <ResourceFieldValue
+                    field={field}
+                    value={query.data[field.key as keyof T]}
+                    format={
+                      field.type === 'date'
+                        ? 'date'
+                        : field.type === 'switch'
+                          ? 'boolean'
+                          : field.key === 'status' || field.key === 'pkl_status'
+                            ? 'status'
+                            : undefined
+                    }
+                  />
                 ),
               }))}
           />
@@ -601,4 +611,42 @@ function formatField(
   if (value === null || value === undefined || value === '') return '—'
   if (Array.isArray(value)) return value.join(', ') || '—'
   return String(value)
+}
+
+type ResourceOption = BaseEntity & Record<string, unknown>
+
+function ResourceFieldValue({
+  field,
+  value,
+  format,
+}: {
+  field: ResourceConfig<BaseEntity>['fields'][number]
+  value: unknown
+  format?: 'status' | 'date' | 'boolean' | 'number'
+}) {
+  const optionsQuery = useQuery({
+    queryKey: ['resource-detail-options', field.optionsEndpoint],
+    queryFn: () =>
+      getResourceList<ResourceOption>(field.optionsEndpoint ?? '', {
+        page: 1,
+        per_page: 100,
+      }),
+    enabled: Boolean(field.optionsEndpoint && value),
+    staleTime: 60_000,
+  })
+
+  if (field.optionsEndpoint && value) {
+    const option = optionsQuery.data?.data.find(
+      (item) => String(item[field.optionValueKey ?? 'id'] ?? item.id) === String(value),
+    )
+
+    if (option) {
+      return <>{String(option[field.optionLabelKey ?? 'name'] ?? option.id)}</>
+    }
+
+    if (optionsQuery.isPending) return <>Memuat…</>
+    return <>—</>
+  }
+
+  return formatField(value, format)
 }
