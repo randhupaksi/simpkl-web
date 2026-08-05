@@ -39,7 +39,7 @@ import {
   updateResource,
 } from '@/shared/services'
 import type { ApiError, BaseEntity } from '@/shared/types'
-import { formatDate } from '@/shared/utils'
+import { formatDate, getStatusLabel } from '@/shared/utils'
 
 type ResourcePermissions = {
   create?: string
@@ -144,10 +144,10 @@ export function ResourceManagementPage<T extends BaseEntity>({
         header: 'Aksi',
         enableHiding: false,
         cell: ({ row }) => (
-          <div className="flex justify-end gap-1">
+          <div className="flex items-center justify-center gap-2">
             <IconButton
               size="sm"
-              variant="ghost"
+              tone="view"
               aria-label={`Lihat ${config.getDisplayName(row.original)}`}
               onClick={() => setViewing(row.original)}
             >
@@ -156,7 +156,7 @@ export function ResourceManagementPage<T extends BaseEntity>({
             {canUpdate ? (
               <IconButton
                 size="sm"
-                variant="ghost"
+                tone="edit"
                 aria-label={`Edit ${config.getDisplayName(row.original)}`}
                 onClick={() => {
                   setApiErrors(undefined)
@@ -171,7 +171,7 @@ export function ResourceManagementPage<T extends BaseEntity>({
                 trigger={
                   <IconButton
                     size="sm"
-                    variant="ghost"
+                    tone="delete"
                     aria-label={`Nonaktifkan ${config.getDisplayName(row.original)}`}
                   >
                     <Trash2 />
@@ -590,7 +590,7 @@ function formatField(
   format?: 'status' | 'date' | 'boolean' | 'number',
 ) {
   if (format === 'status' && typeof value === 'string') {
-    return <StatusBadge status={value} label={humanize(value)} />
+    return <StatusBadge status={value} label={getStatusLabel(value)} />
   }
   if (format === 'date')
     return formatDate(typeof value === 'string' ? value : '')
@@ -601,10 +601,4 @@ function formatField(
   if (value === null || value === undefined || value === '') return '—'
   if (Array.isArray(value)) return value.join(', ') || '—'
   return String(value)
-}
-
-function humanize(value: string) {
-  return value
-    .replaceAll('_', ' ')
-    .replace(/\b\w/g, (letter) => letter.toUpperCase())
 }

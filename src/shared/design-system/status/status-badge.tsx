@@ -1,6 +1,7 @@
 import { Circle } from 'lucide-react'
 
 import { Badge, type BadgeProps } from '@/shared/components/ui'
+import { getStatusLabel } from '@/shared/utils'
 
 const statusTone: Record<string, BadgeProps['tone']> = {
   active: 'success',
@@ -43,7 +44,7 @@ export function StatusBadge({ status, label }: StatusBadgeProps) {
   return (
     <Badge tone={statusTone[status.toLowerCase()] ?? 'neutral'}>
       <Circle className="size-2 fill-current" aria-hidden="true" />
-      {label ?? status}
+      {label ?? getStatusLabel(status)}
     </Badge>
   )
 }
