@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 import type { AuthSession, AuthTokens, AuthUser } from '../types/auth'
 
@@ -13,9 +14,22 @@ const INITIAL_SESSION: AuthSession = {
   tokens: null,
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-  ...INITIAL_SESSION,
-  setSession: (user, tokens) => set({ user, tokens }),
-  setTokens: (tokens) => set({ tokens }),
-  clearSession: () => set(INITIAL_SESSION),
-}))
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      ...INITIAL_SESSION,
+      setSession: (user, tokens) => set({ user, tokens }),
+      setTokens: (tokens) => set({ tokens }),
+      clearSession: () => set(INITIAL_SESSION),
+    }),
+    {
+      name: 'simpkl-auth-session',
+      storage: createJSONStorage(() => localStorage),
+      version: 1,
+      partialize: (state) => ({
+        user: state.user,
+        tokens: state.tokens,
+      }),
+    },
+  ),
+)
