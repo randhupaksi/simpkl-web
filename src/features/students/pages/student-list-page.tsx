@@ -1,13 +1,17 @@
 import { FileUp, Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 
 import { useStudentsQuery } from '@/features/students/api'
-import { studentColumns } from '@/features/students/components/student-table'
+import { createStudentColumns } from '@/features/students/components/student-table'
 import { PERMISSIONS, hasPermission } from '@/app/config/permissions'
 import { useAuthStore } from '@/features/auth/hooks/use-auth-store'
+import { API_ENDPOINTS } from '@/shared/constants'
 import { ErrorState } from '@/shared/components/feedback'
 import { buttonVariants, Select } from '@/shared/components/ui'
 import { DataTable } from '@/shared/components/tables'
+import { getResourceList } from '@/shared/services'
+import type { Major, SchoolClass } from '@/shared/types'
 import { PageActionLink, PageHeader } from '@/shared/design-system/page'
 import { useDebouncedValue, useListState } from '@/shared/hooks'
 import { Link } from 'react-router-dom'
@@ -23,6 +27,42 @@ export function StudentListPage() {
     search: debouncedSearch || undefined,
     pkl_status: pklStatus === 'all' ? undefined : pklStatus,
   })
+  const classesQuery = useQuery({
+    queryKey: ['student-labels', 'classes'],
+    queryFn: () =>
+      getResourceList<SchoolClass>(API_ENDPOINTS.classes, {
+        page: 1,
+        per_page: 100,
+      }),
+    staleTime: 60_000,
+  })
+  const majorsQuery = useQuery({
+    queryKey: ['student-labels', 'majors'],
+    queryFn: () =>
+      getResourceList<Major>(API_ENDPOINTS.majors, {
+        page: 1,
+        per_page: 100,
+      }),
+    staleTime: 60_000,
+  })
+  const studentColumns = useMemo(
+    () =>
+      createStudentColumns(
+        Object.fromEntries(
+          (classesQuery.data?.data ?? []).map((schoolClass) => [
+            schoolClass.id,
+            schoolClass.name,
+          ]),
+        ),
+        Object.fromEntries(
+          (majorsQuery.data?.data ?? []).map((major) => [
+            major.id,
+            major.name,
+          ]),
+        ),
+      ),
+    [classesQuery.data?.data, majorsQuery.data?.data],
+  )
 
   return (
     <div className="enter-animation space-y-6">

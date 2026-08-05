@@ -26,7 +26,11 @@ const pklLabels: Record<string, string> = {
   not_participating: 'Tidak mengikuti',
 }
 
-export const studentColumns: ColumnDef<Student>[] = [
+export function createStudentColumns(
+  classNames: Record<string, string>,
+  majorNames: Record<string, string>,
+): ColumnDef<Student>[] {
+  return [
   {
     accessorKey: 'name',
     header: 'Siswa',
@@ -43,8 +47,8 @@ export const studentColumns: ColumnDef<Student>[] = [
     accessorKey: 'class_id',
     header: 'Kelas',
     cell: ({ row }) => (
-      <span className="font-mono text-xs">
-        {compactId(row.original.class_id)}
+      <span className="font-medium">
+        {classNames[row.original.class_id] ?? compactId(row.original.class_id)}
       </span>
     ),
   },
@@ -52,8 +56,8 @@ export const studentColumns: ColumnDef<Student>[] = [
     accessorKey: 'major_id',
     header: 'Jurusan',
     cell: ({ row }) => (
-      <span className="font-mono text-xs">
-        {compactId(row.original.major_id)}
+      <span className="font-medium">
+        {majorNames[row.original.major_id] ?? compactId(row.original.major_id)}
       </span>
     ),
   },
@@ -75,7 +79,7 @@ export const studentColumns: ColumnDef<Student>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi siswa" variant="ghost" size="sm">
+          <IconButton aria-label="Aksi siswa" tone="neutral" size="sm">
             <MoreHorizontal />
           </IconButton>
         </DropdownMenuTrigger>
@@ -90,4 +94,5 @@ export const studentColumns: ColumnDef<Student>[] = [
       </DropdownMenu>
     ),
   },
-]
+  ]
+}

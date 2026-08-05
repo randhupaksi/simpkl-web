@@ -1,13 +1,17 @@
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 
 import { usePlacementsQuery } from '@/features/placements/api'
-import { placementColumns } from '@/features/placements/components/placement-table'
+import { createPlacementColumns } from '@/features/placements/components/placement-table'
 import { PERMISSIONS, hasPermission } from '@/app/config/permissions'
 import { useAuthStore } from '@/features/auth/hooks/use-auth-store'
+import { API_ENDPOINTS } from '@/shared/constants'
 import { ErrorState } from '@/shared/components/feedback'
 import { DataTable } from '@/shared/components/tables'
 import { Select } from '@/shared/components/ui'
+import { getResourceList } from '@/shared/services'
+import type { Company, Student } from '@/shared/types'
 import { PageActionLink, PageHeader } from '@/shared/design-system/page'
 import { useDebouncedValue, useListState } from '@/shared/hooks'
 
@@ -22,6 +26,42 @@ export function PlacementListPage() {
     search: debouncedSearch || undefined,
     status: status === 'all' ? undefined : status,
   })
+  const studentsQuery = useQuery({
+    queryKey: ['placement-labels', 'students'],
+    queryFn: () =>
+      getResourceList<Student>(API_ENDPOINTS.students, {
+        page: 1,
+        per_page: 100,
+      }),
+    staleTime: 60_000,
+  })
+  const companiesQuery = useQuery({
+    queryKey: ['placement-labels', 'companies'],
+    queryFn: () =>
+      getResourceList<Company>(API_ENDPOINTS.companies, {
+        page: 1,
+        per_page: 100,
+      }),
+    staleTime: 60_000,
+  })
+  const placementColumns = useMemo(
+    () =>
+      createPlacementColumns(
+        Object.fromEntries(
+          (studentsQuery.data?.data ?? []).map((student) => [
+            student.id,
+            student.name,
+          ]),
+        ),
+        Object.fromEntries(
+          (companiesQuery.data?.data ?? []).map((company) => [
+            company.id,
+            company.name,
+          ]),
+        ),
+      ),
+    [studentsQuery.data?.data, companiesQuery.data?.data],
+  )
 
   return (
     <div className="enter-animation space-y-6">

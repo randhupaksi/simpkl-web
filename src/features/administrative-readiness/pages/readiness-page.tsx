@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import { useQuery } from '@tanstack/react-query'
 import { Calculator, ShieldCheck } from 'lucide-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
 import {
@@ -35,7 +36,8 @@ import { PageHeader } from '@/shared/design-system/page'
 import { StatusBadge } from '@/shared/design-system/status'
 import { useDebouncedValue, useListState } from '@/shared/hooks'
 import { API_ENDPOINTS } from '@/shared/constants'
-import type { Readiness } from '@/shared/types'
+import { getResourceList } from '@/shared/services'
+import type { Readiness, Student } from '@/shared/types'
 
 const actionFields: ResourceField[] = [
   {
@@ -60,8 +62,15 @@ const actionFields: ResourceField[] = [
   },
 ]
 
-const columns: ColumnDef<Readiness>[] = [
-  { accessorKey: 'student_id', header: 'Siswa' },
+function createReadinessColumns(
+  studentNames: Record<string, string>,
+): ColumnDef<Readiness>[] {
+  return [
+  {
+    accessorKey: 'student_id',
+    header: 'Siswa',
+    cell: ({ row }) => studentNames[row.original.student_id] ?? row.original.student_id,
+  },
   {
     id: 'progress',
     header: 'Kelengkapan',
@@ -92,7 +101,8 @@ const columns: ColumnDef<Readiness>[] = [
     header: 'Status',
     cell: ({ getValue }) => <StatusBadge status={String(getValue())} />,
   },
-]
+  ]
+}
 
 export function ReadinessPage() {
   const permissions = useAuthStore((state) => state.user?.permissions ?? [])
@@ -106,6 +116,27 @@ export function ReadinessPage() {
     per_page: pagination.pageSize,
     search: debouncedSearch || undefined,
   })
+  const studentsQuery = useQuery({
+    queryKey: ['readiness-labels', 'students'],
+    queryFn: () =>
+      getResourceList<Student>(API_ENDPOINTS.students, {
+        page: 1,
+        per_page: 100,
+      }),
+    staleTime: 60_000,
+  })
+  const columns = useMemo(
+    () =>
+      createReadinessColumns(
+        Object.fromEntries(
+          (studentsQuery.data?.data ?? []).map((student) => [
+            student.id,
+            student.name,
+          ]),
+        ),
+      ),
+    [studentsQuery.data?.data],
+  )
   const mutation = mode === 'override' ? override : recalculate
 
   const submit = (values: ResourceValues) => {

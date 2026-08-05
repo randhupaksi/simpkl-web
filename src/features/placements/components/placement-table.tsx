@@ -11,26 +11,19 @@ import {
 } from '@/shared/components/ui'
 import { StatusBadge } from '@/shared/design-system/status'
 import type { Placement } from '@/shared/types'
-import { compactId, formatDate } from '@/shared/utils'
+import { compactId, formatDate, getStatusLabel } from '@/shared/utils'
 
-const placementLabels: Record<string, string> = {
-  draft: 'Draft',
-  pending_verification: 'Menunggu verifikasi',
-  approved: 'Disetujui',
-  ready: 'Siap',
-  active: 'Sedang PKL',
-  completed: 'Selesai',
-  cancelled: 'Dibatalkan',
-  transferred: 'Dipindahkan',
-}
-
-export const placementColumns: ColumnDef<Placement>[] = [
+export function createPlacementColumns(
+  studentNames: Record<string, string>,
+  companyNames: Record<string, string>,
+): ColumnDef<Placement>[] {
+  return [
   {
     accessorKey: 'student_id',
     header: 'Siswa',
     cell: ({ row }) => (
-      <span className="font-mono text-xs">
-        {compactId(row.original.student_id)}
+      <span className="font-medium">
+        {studentNames[row.original.student_id] ?? compactId(row.original.student_id)}
       </span>
     ),
   },
@@ -38,8 +31,8 @@ export const placementColumns: ColumnDef<Placement>[] = [
     accessorKey: 'company_id',
     header: 'Perusahaan',
     cell: ({ row }) => (
-      <span className="font-mono text-xs">
-        {compactId(row.original.company_id)}
+      <span className="font-medium">
+        {companyNames[row.original.company_id] ?? compactId(row.original.company_id)}
       </span>
     ),
   },
@@ -72,7 +65,7 @@ export const placementColumns: ColumnDef<Placement>[] = [
     cell: ({ row }) => (
       <StatusBadge
         status={row.original.status}
-        label={placementLabels[row.original.status] ?? row.original.status}
+        label={getStatusLabel(row.original.status)}
       />
     ),
   },
@@ -83,7 +76,7 @@ export const placementColumns: ColumnDef<Placement>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi penempatan" variant="ghost" size="sm">
+          <IconButton aria-label="Aksi penempatan" tone="neutral" size="sm">
             <MoreHorizontal />
           </IconButton>
         </DropdownMenuTrigger>
@@ -104,4 +97,5 @@ export const placementColumns: ColumnDef<Placement>[] = [
       </DropdownMenu>
     ),
   },
-]
+  ]
+}
