@@ -68,7 +68,7 @@ export const companyColumns: ColumnDef<Company>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi perusahaan" variant="ghost" size="sm">
+          <IconButton aria-label="Aksi perusahaan" tone="neutral" size="sm">
             <MoreHorizontal />
           </IconButton>
         </DropdownMenuTrigger>

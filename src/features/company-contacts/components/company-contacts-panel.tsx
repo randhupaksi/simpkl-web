@@ -80,11 +80,11 @@ export function CompanyContactsPanel({ companyId }: { companyId: string }) {
       header: 'Aksi',
       enableHiding: false,
       cell: ({ row }) => (
-        <div className="flex justify-end gap-1">
+        <div className="flex items-center justify-center gap-2">
           {canUpdate ? (
             <IconButton
               size="sm"
-              variant="ghost"
+              tone="edit"
               aria-label={`Edit ${row.original.name}`}
               onClick={() => setEditing(row.original)}
             >
@@ -96,7 +96,7 @@ export function CompanyContactsPanel({ companyId }: { companyId: string }) {
               trigger={
                 <IconButton
                   size="sm"
-                  variant="ghost"
+                  tone="delete"
                   aria-label={`Hapus ${row.original.name}`}
                 >
                   <Trash2 />

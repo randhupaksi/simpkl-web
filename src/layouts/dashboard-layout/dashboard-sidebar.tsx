@@ -59,8 +59,13 @@ export function DashboardSidebar({
         </div>
       </div>
 
-      <nav className="scrollbar-subtle flex-1 overflow-y-auto px-3.5 py-6">
-        <div className="space-y-7">
+      <nav
+        className={cn(
+          'scrollbar-subtle flex-1 overflow-y-auto py-6',
+          collapsed ? 'px-2' : 'px-3.5',
+        )}
+      >
+        <div className={cn(collapsed ? 'space-y-4' : 'space-y-7')}>
           {NAVIGATION_GROUPS.map((group) => {
             const visibleItems = group.items.filter((item) =>
               hasPermission(
@@ -87,9 +92,13 @@ export function DashboardSidebar({
                         className={({ isActive }) =>
                           cn(
                             'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] border-l-2 border-transparent text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
-                            collapsed ? 'justify-center px-2' : 'gap-3 px-3.5',
+                            collapsed
+                              ? 'relative left-1 mx-auto size-12 justify-center border-l-0 px-0'
+                              : 'gap-3 px-3.5',
                             isActive &&
-                              'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]',
+                              (collapsed
+                                ? 'ring-sidebar-active ring-1 ring-inset bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'
+                                : 'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'),
                           )
                         }
                       >
@@ -124,7 +133,10 @@ export function DashboardSidebar({
             <IconButton
               aria-label={collapsed ? 'Perluas sidebar' : 'Ringkas sidebar'}
               variant="ghost"
-              className="text-sidebar-muted hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed w-full"
+              className={cn(
+                'text-sidebar-muted hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed',
+                collapsed ? 'mx-auto size-12' : 'w-full',
+              )}
               onClick={() => onCollapsedChange(!collapsed)}
             >
               <ChevronLeft

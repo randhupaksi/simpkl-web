@@ -63,7 +63,7 @@ export const periodColumns: ColumnDef<Period>[] = [
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi periode" variant="ghost" size="sm">
+          <IconButton aria-label="Aksi periode" tone="neutral" size="sm">
             <MoreHorizontal />
           </IconButton>
         </DropdownMenuTrigger>

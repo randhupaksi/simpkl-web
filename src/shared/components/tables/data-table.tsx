@@ -133,7 +133,10 @@ export function DataTable<TData>({
                   <th
                     key={header.id}
                     scope="col"
-                    className="border-border text-muted-foreground border-b px-4 py-3 text-xs font-bold tracking-wide uppercase"
+                    className={cn(
+                      'border-border text-muted-foreground border-b px-4 py-3 text-xs font-bold tracking-wide uppercase',
+                      header.column.id === 'actions' && 'text-center',
+                    )}
                   >
                     {header.isPlaceholder
                       ? null
@@ -168,7 +171,10 @@ export function DataTable<TData>({
                     {row.getVisibleCells().map((cell) => (
                       <td
                         key={cell.id}
-                        className="border-border border-b px-4 py-[var(--table-cell-padding-y,0.875rem)] align-middle last:text-right"
+                        className={cn(
+                          'border-border border-b px-4 py-[var(--table-cell-padding-y,0.875rem)] align-middle',
+                          cell.column.id === 'actions' ? 'text-center' : 'last:text-right',
+                        )}
                       >
                         {flexRender(
                           cell.column.columnDef.cell,

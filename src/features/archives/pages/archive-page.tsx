@@ -77,7 +77,7 @@ export function ArchivePage() {
       cell: ({ row }) => (
         <IconButton
           size="sm"
-          variant="ghost"
+          tone="view"
           aria-label="Lihat snapshot arsip"
           onClick={() => setViewing(row.original)}
         >

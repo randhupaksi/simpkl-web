@@ -64,7 +64,7 @@ function DocumentDownloadAction({ document }: { document: DocumentMetadata }) {
       <TooltipTrigger asChild>
         <IconButton
           aria-label={`Unduh ${document.original_name}`}
-          variant="ghost"
+          tone="view"
           size="sm"
           disabled={mutation.isPending}
           onClick={() => void handleDownload()}
@@ -90,7 +90,7 @@ function DocumentActions({ document }: { document: DocumentMetadata }) {
   const remove = useDeleteDocumentMutation()
 
   return (
-    <div className="flex justify-end gap-1">
+    <div className="flex items-center justify-center gap-2">
       <DocumentDownloadAction document={document} />
       {hasPermission(permissions, PERMISSIONS.document.verify) ? (
         <>
@@ -98,7 +98,7 @@ function DocumentActions({ document }: { document: DocumentMetadata }) {
             <TooltipTrigger asChild>
               <IconButton
                 aria-label={`Verifikasi ${document.original_name}`}
-                variant="ghost"
+                tone="view"
                 size="sm"
                 onClick={() => setVerifyOpen(true)}
               >
@@ -120,6 +120,7 @@ function DocumentActions({ document }: { document: DocumentMetadata }) {
                 <Select
                   value={status}
                   onValueChange={setStatus}
+                  placeholder="Pilih status verifikasi"
                   ariaLabel="Status verifikasi"
                   options={[
                     { value: 'pending', label: 'Menunggu verifikasi' },
@@ -168,7 +169,7 @@ function DocumentActions({ document }: { document: DocumentMetadata }) {
           trigger={
             <IconButton
               aria-label={`Hapus ${document.original_name}`}
-              variant="ghost"
+              tone="delete"
               size="sm"
             >
               <Trash2 />
