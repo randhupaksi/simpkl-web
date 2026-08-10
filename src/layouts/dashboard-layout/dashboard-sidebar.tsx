@@ -52,7 +52,7 @@ export function DashboardSidebar({
                 SIMPKL
               </p>
               <p className="text-sidebar-muted mt-0.5 truncate text-[0.6875rem] tracking-wide">
-                SMK Citra Negara
+                Practical Work Placement Management
               </p>
             </div>
           ) : null}
@@ -97,7 +97,7 @@ export function DashboardSidebar({
                               : 'gap-3 px-3.5',
                             isActive &&
                               (collapsed
-                                ? 'ring-sidebar-active ring-1 ring-inset bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'
+                                ? 'ring-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)] ring-1 ring-inset'
                                 : 'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'),
                           )
                         }

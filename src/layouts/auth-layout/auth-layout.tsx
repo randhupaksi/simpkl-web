@@ -25,7 +25,7 @@ export function AuthLayout() {
             <School className="size-6" />
           </span>
           <div>
-            <p className="font-bold tracking-tight">SIMPKL Citra Negara</p>
+            <p className="font-bold tracking-tight">SIMPkl</p>
             <p className="text-sidebar-muted mt-0.5 text-xs">
               Sistem Manajemen Praktik Kerja Lapangan
             </p>
@@ -65,7 +65,7 @@ export function AuthLayout() {
         </div>
 
         <p className="text-sidebar-muted relative z-10 text-xs">
-          SMK Citra Negara · Administrasi PKL Terintegrasi
+          Practical Work Placement Administration
         </p>
       </section>
 
