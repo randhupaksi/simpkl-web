@@ -24,6 +24,9 @@ SIMPkl Web connects staff-facing workflows to the SIMPkl API and provides:
 - placement creation, status management, and placement transfer;
 - administrative readiness monitoring and recalculation;
 - private document upload, verification, download, and deletion;
+- a Document Automation Center for individual or batch official letters,
+  source-data validation, institution profile and signatory management,
+  versioned templates, DOCX/PDF/XLSX generation, ZIP packages, and file history;
 - placement reporting and export to Excel/PDF;
 - period archiving;
 - user, role, and permission administration;
@@ -65,6 +68,10 @@ The current navigation is organized into the following areas.
 
 - **Documents** — upload and manage private PKL documents, metadata, dates,
   verification status, and document ownership.
+- **Document Automation** — select a period or single placement, validate
+  official source data, create editable Word letters, final PDFs, styled Excel
+  recaps, and downloadable batch ZIP packages; manage institution identity,
+  signatories, and template versions from the same workspace.
 - **Reports** — view placement reports and export professionally styled Excel
   and PDF files.
 - **Archives** — review archived periods and historical snapshots.
@@ -196,7 +203,7 @@ be treated as a security boundary.
 
 Permissions are grouped around periods, majors, classes, students, companies,
 supervisors, placements, documents, readiness, reports, archives, users, roles,
-and permission definitions. Wildcard permissions such as namespace-level
+permission definitions, and document automation. Wildcard permissions such as namespace-level
 permissions are supported by the shared permission helper.
 
 ## UI system and interaction design
@@ -287,8 +294,28 @@ The main integrated resource groups are:
 ```text
 auth, dashboard, periods, majors, classes, students, companies,
 company contacts, supervisors, placements, readiness, documents,
-reports, archives, users, roles, and permissions
+document automation, reports, archives, users, roles, and permissions
 ```
+
+## Document Automation Center
+
+The `/document-automation` workspace is organized into five operational tabs:
+
+- **Create Documents** — filter by period, class, major, company, supervisor, or
+  one specific placement; select templates and DOCX/PDF formats; select the
+  signing official and letter date; preview completeness; then generate.
+- **History** — download complete ZIP packages or individual DOCX, PDF, and XLSX
+  files with visible template version, letter number, student label, and size.
+- **Institution Profile** — configure the reusable letterhead identity and
+  official contact information.
+- **Signatories** — maintain active signing officials and choose one default.
+- **Templates** — review active templates and create a new immutable version
+  when wording or numbering changes.
+
+Generation is disabled until the server-side preview reports that all required
+source data is ready. The frontend never creates official values itself; the
+backend remains responsible for validation, numbering, snapshotting,
+generation, storage, and authorization.
 
 ## Capability boundaries
 
