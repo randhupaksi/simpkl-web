@@ -32,4 +32,17 @@ export const API_ENDPOINTS = {
   roles: '/roles',
   rolePermissions: (id: string) => `/roles/${id}/permissions`,
   permissions: '/permissions',
+  automation: {
+    profile: '/document-automation/profile',
+    signatories: '/document-automation/signatories',
+    templates: '/document-automation/templates',
+    preview: '/document-automation/preview',
+    generate: '/document-automation/generate',
+    batches: '/document-automation/batches',
+    documents: '/document-automation/documents',
+    batchDownload: (id: string) =>
+      `/document-automation/batches/${id}/download`,
+    documentDownload: (id: string) =>
+      `/document-automation/documents/${id}/download`,
+  },
 } as const

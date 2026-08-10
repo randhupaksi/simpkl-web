@@ -78,6 +78,12 @@ export const PERMISSIONS = {
     update: 'permission.update',
     delete: 'permission.delete',
   },
+  automation: {
+    view: 'automation.view',
+    generate: 'automation.generate',
+    download: 'automation.download',
+    manage: 'automation.manage',
+  },
 } as const
 
 export function hasPermission(

@@ -10,6 +10,7 @@ import {
   ClassListPage,
   DashboardPage,
   DocumentListPage,
+  DocumentAutomationPage,
   LoginPage,
   PeriodListPage,
   PeriodCreatePage,
@@ -250,6 +251,17 @@ export const appRouter = createBrowserRouter([
               {
                 path: ROUTE_PATHS.documents,
                 element: withSuspense(<DocumentListPage />),
+              },
+            ],
+          },
+          {
+            element: (
+              <PermissionRoute permission={PERMISSIONS.automation.view} />
+            ),
+            children: [
+              {
+                path: ROUTE_PATHS.documentAutomation,
+                element: withSuspense(<DocumentAutomationPage />),
               },
             ],
           },

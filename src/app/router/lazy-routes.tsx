@@ -113,6 +113,12 @@ export const DocumentListPage = lazy(() =>
   })),
 )
 
+export const DocumentAutomationPage = lazy(() =>
+  import('@/features/document-automation/pages').then((module) => ({
+    default: module.DocumentAutomationPage,
+  })),
+)
+
 export const ReportPage = lazy(() =>
   import('@/features/reports/pages').then((module) => ({
     default: module.ReportPage,

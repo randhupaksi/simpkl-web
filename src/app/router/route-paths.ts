@@ -6,6 +6,7 @@ export const ROUTE_PATHS = {
   companies: '/companies',
   placements: '/placements',
   documents: '/documents',
+  documentAutomation: '/document-automation',
   readiness: '/administrative-readiness',
   reports: '/reports',
   archives: '/archives',

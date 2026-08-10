@@ -6,6 +6,7 @@ import {
   ClipboardCheck,
   FileBarChart,
   Files,
+  FileCog,
   GraduationCap,
   LayoutDashboard,
   MapPin,
@@ -109,6 +110,12 @@ export const NAVIGATION_GROUPS: readonly NavigationGroup[] = [
         path: ROUTE_PATHS.documents,
         icon: Files,
         permission: PERMISSIONS.document.view,
+      },
+      {
+        label: 'Otomasi Dokumen',
+        path: ROUTE_PATHS.documentAutomation,
+        icon: FileCog,
+        permission: PERMISSIONS.automation.view,
       },
       {
         label: 'Laporan',
