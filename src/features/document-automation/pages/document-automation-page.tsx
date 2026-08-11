@@ -129,25 +129,25 @@ export function DocumentAutomationPage() {
         description="Gunakan data penempatan satu kali untuk membuat surat resmi Word dan PDF, rekap Excel, serta paket ZIP secara individual atau massal."
       />
       <Tabs defaultValue="generate">
-        <TabsList className="scrollbar-subtle flex w-full justify-start overflow-x-auto">
+        <TabsList className="justify-start">
           <TabsTrigger value="generate">
-            <FileCog className="mr-2 size-4" />
+            <FileCog className="size-4 shrink-0" />
             Buat Dokumen
           </TabsTrigger>
           <TabsTrigger value="history">
-            <History className="mr-2 size-4" />
+            <History className="size-4 shrink-0" />
             Riwayat
           </TabsTrigger>
           <TabsTrigger value="profile">
-            <School className="mr-2 size-4" />
+            <School className="size-4 shrink-0" />
             Profil Institusi
           </TabsTrigger>
           <TabsTrigger value="signatories">
-            <PenLine className="mr-2 size-4" />
+            <PenLine className="size-4 shrink-0" />
             Penandatangan
           </TabsTrigger>
           <TabsTrigger value="templates">
-            <Settings2 className="mr-2 size-4" />
+            <Settings2 className="size-4 shrink-0" />
             Template
           </TabsTrigger>
         </TabsList>
@@ -451,7 +451,7 @@ function GeneratorPanel() {
             <StepTitle
               number="3"
               title="Validasi dan generate"
-              description="SIMPkl memeriksa nama, kelas, jurusan, perusahaan, pembimbing, orang tua, profil institusi, dan penandatangan."
+              description="SIMPKL memeriksa nama, kelas, jurusan, perusahaan, pembimbing, orang tua, profil institusi, dan penandatangan."
             />
           </CardHeader>
           <CardContent className="space-y-4">

@@ -1,6 +1,6 @@
-# SIMPkl Web
+# SIMPKL Web
 
-SIMPkl Web is the browser application for a practical work placement management
+SIMPKL Web is the browser application for a practical work placement management
 platform. It gives school and institution staff a structured workspace for
 planning, coordinating, verifying, monitoring, reporting, and archiving PKL
 activities.
@@ -14,7 +14,7 @@ or an employer operations portal.
 
 ## Product overview
 
-SIMPkl Web connects staff-facing workflows to the SIMPkl API and provides:
+SIMPKL Web connects staff-facing workflows to the SIMPKL API and provides:
 
 - authenticated application access with persisted session state;
 - permission-aware navigation and route protection;
@@ -173,7 +173,7 @@ ownership of labels and validation.
 - **Zustand** owns the authenticated session and user context.
 - **Local component state** owns dialogs, sidebar collapse, temporary filters,
   and other short-lived interactions.
-- **localStorage** currently persists the SIMPkl session under the
+- **localStorage** currently persists the SIMPKL session under the
   simpkl-auth-session key so a page refresh does not immediately log the user
   out. Tokens are still sensitive; a production deployment should prefer a
   secure HttpOnly refresh-token cookie architecture.
@@ -208,7 +208,7 @@ permissions are supported by the shared permission helper.
 
 ## UI system and interaction design
 
-SIMPkl Web uses an enterprise administrative visual language for school
+SIMPKL Web uses an enterprise administrative visual language for school
 operations:
 
 - clear hierarchy for dense operational data;
@@ -340,7 +340,7 @@ existing assignments.
 
 - Node.js compatible with the current package-lock.
 - npm.
-- A running SIMPkl API instance, normally at
+- A running SIMPKL API instance, normally at
   http://localhost:8080/api/v1.
 
 ### Install and configure

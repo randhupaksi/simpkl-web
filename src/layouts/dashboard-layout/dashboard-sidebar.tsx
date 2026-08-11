@@ -30,7 +30,7 @@ export function DashboardSidebar({
   return (
     <aside
       className={cn(
-        'border-sidebar-border bg-sidebar-background text-sidebar-foreground flex h-full flex-col border-r',
+        'border-sidebar-border bg-sidebar-background text-sidebar-foreground flex h-full flex-col overflow-hidden rounded-tr-[var(--radius-lg)] rounded-br-[var(--radius-lg)] border-r',
         className,
       )}
       aria-label="Navigasi utama"
@@ -91,14 +91,14 @@ export function DashboardSidebar({
                         onClick={onNavigate}
                         className={({ isActive }) =>
                           cn(
-                            'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] border-l-2 border-transparent text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
+                            'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] border-l-2 border-l-transparent text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
                             collapsed
-                              ? 'relative left-1 mx-auto size-12 justify-center border-l-0 px-0'
+                              ? 'mx-auto size-12 justify-center border-l-0 px-0'
                               : 'gap-3 px-3.5',
                             isActive &&
                               (collapsed
                                 ? 'ring-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)] ring-1 ring-inset'
-                                : 'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'),
+                                : 'border-l-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'),
                           )
                         }
                       >

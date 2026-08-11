@@ -52,7 +52,7 @@ Token hanya berada di memory. Solusi produksi ideal adalah refresh token cookie
 | Penempatan     | `GET/POST /placements`, `GET/PUT/DELETE /placements/{id}`, `POST /placements/{id}/transfer`                                          |
 | Dokumen        | `GET/POST /documents`, `PUT /documents/{id}/verify`, `GET /documents/{id}/download`, `DELETE /documents/{id}`, `GET /document-types` |
 | Readiness      | `GET /readiness`, `POST /readiness/recalculate`, `POST /readiness/override`                                                          |
-| Laporan        | `GET /reports/dashboard`, `GET /reports/placements` untuk JSON/XLSX/PDF                                                              |
+| Laporan        | `GET /reports/dashboard?period_id={id}` untuk pusat operasional, `GET /reports/placements` untuk JSON/XLSX/PDF                      |
 | Arsip          | `GET /archives`, `POST /archives`, `GET /archives/{id}`                                                                              |
 | RBAC           | CRUD `/users`, `/roles`, dan `/permissions`                                                                                          |
 
@@ -69,8 +69,10 @@ commit eksplisit. Upload dokumen memakai multipart privat. Tanggal entity Go
   current assignment tidak tersedia; menampilkan daftar kosong sebagai kondisi
   awal dapat menghapus assignment yang sudah ada.
 - Riwayat versi dokumen belum memiliki endpoint list khusus.
-- Grafik siswa per jurusan dan aktivitas terbaru belum memiliki response
-  dashboard.
+- Dashboard operasional mengembalikan konteks periode, status peserta yang
+  eksklusif, progres per jurusan, kesiapan administrasi, kapasitas perusahaan,
+  prioritas, agenda, dan aktivitas audit terbaru. Parameter `period_id` bersifat
+  opsional; tanpa parameter, backend memilih periode aktif terbaru.
 - Backend list tidak menerima parameter sort, sehingga frontend tidak mengirim
   sort rekaan. DataTable tetap menyediakan visibility, search, filter, dan
   pagination.

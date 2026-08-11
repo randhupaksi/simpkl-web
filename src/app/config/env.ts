@@ -1,5 +1,7 @@
 const DEFAULT_API_BASE_URL = 'http://localhost:8080/api/v1'
-const DEFAULT_API_TIMEOUT_MS = 15_000
+// Keep the browser timeout slightly above the API write timeout (30 seconds),
+// so the server can return its own structured error instead of a cancelled request.
+const DEFAULT_API_TIMEOUT_MS = 35_000
 
 function parsePositiveNumber(value: string | undefined, fallback: number) {
   const number = Number(value)
