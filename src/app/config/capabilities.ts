@@ -39,19 +39,18 @@ export const FEATURE_CAPABILITIES: Record<CapabilityKey, Capability> = {
       'Backend perlu menyediakan daftar versi yang dapat dibaca berdasarkan dokumen atau pemilik.',
   },
   dashboardMajorBreakdown: {
-    available: false,
+    available: true,
     label: 'Grafik siswa per jurusan',
     reason:
-      'Response dashboard belum memuat distribusi peserta berdasarkan jurusan.',
-    backendRequirement:
-      'Response dashboard perlu menambahkan breakdown jurusan dengan label dan jumlah.',
+      'Dashboard operasional menyediakan total peserta, penempatan, dan peserta aktif untuk setiap jurusan dalam periode terpilih.',
+    backendRequirement: 'Tidak ada kebutuhan backend tambahan saat ini.',
   },
   recentActivity: {
-    available: false,
+    available: true,
     label: 'Aktivitas terbaru',
-    reason: 'Belum tersedia feed aktivitas yang aman untuk dashboard.',
-    backendRequirement:
-      'Backend perlu menyediakan aktivitas terotorisasi dengan waktu, actor, dan ringkasan aksi.',
+    reason:
+      'Dashboard menampilkan aktivitas audit terbaru yang tersimpan oleh sistem.',
+    backendRequirement: 'Tidak ada kebutuhan backend tambahan saat ini.',
   },
   serverSorting: {
     available: false,
