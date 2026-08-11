@@ -7,7 +7,14 @@ import {
   type VisibilityState,
   useReactTable,
 } from '@tanstack/react-table'
-import { ChevronLeft, ChevronRight, Columns3, Search } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Columns3,
+  Search,
+} from 'lucide-react'
 import { useState, type ReactNode } from 'react'
 
 import { EmptyState } from '@/shared/components/feedback'
@@ -20,6 +27,7 @@ import {
   DropdownMenuTrigger,
   Input,
   Skeleton,
+  Select,
 } from '@/shared/components/ui'
 import { Typography } from '@/shared/design-system/typography'
 import { cn } from '@/shared/lib/utils'
@@ -28,6 +36,7 @@ export type DataTableProps<TData> = {
   columns: ColumnDef<TData>[]
   data: TData[]
   pageCount?: number
+  totalItems?: number
   pagination?: PaginationState
   onPaginationChange?: OnChangeFn<PaginationState>
   search?: string
@@ -45,6 +54,7 @@ export function DataTable<TData>({
   columns,
   data,
   pageCount = 1,
+  totalItems,
   pagination = { pageIndex: 0, pageSize: 20 },
   onPaginationChange,
   search,
@@ -69,6 +79,15 @@ export function DataTable<TData>({
     onColumnVisibilityChange: setColumnVisibility,
     state: { pagination, columnVisibility },
   })
+  const isPaginated = Boolean(onPaginationChange)
+  const currentPage = pagination.pageIndex + 1
+  const resolvedTotalItems = totalItems ?? data.length
+  const rangeStart =
+    resolvedTotalItems === 0 ? 0 : pagination.pageIndex * pagination.pageSize + 1
+  const rangeEnd = Math.min(
+    currentPage * pagination.pageSize,
+    resolvedTotalItems,
+  )
 
   return (
     <div
@@ -196,35 +215,119 @@ export function DataTable<TData>({
             compact
           />
         </div>
-      ) : (
-        <div className="flex flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <Typography variant="caption">
-            Halaman {pagination.pageIndex + 1} dari {Math.max(pageCount, 1)}
-          </Typography>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage() || isLoading}
-              aria-label="Halaman sebelumnya"
-            >
-              <ChevronLeft />
-              Sebelumnya
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage() || isLoading}
-              aria-label="Halaman berikutnya"
-            >
-              Berikutnya
-              <ChevronRight />
-            </Button>
+      ) : !isLoading ? (
+        <div className="border-border bg-surface-subtle flex flex-col gap-3 border-t px-4 py-3.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2.5">
+            {isPaginated ? (
+              <div className="flex items-center gap-2.5">
+                <span className="text-muted-foreground text-[0.625rem] font-bold tracking-[0.14em] uppercase">
+                  Baris
+                </span>
+                <Select
+                  value={String(pagination.pageSize)}
+                  onValueChange={(value) => {
+                    table.setPageSize(Number(value))
+                    table.setPageIndex(0)
+                  }}
+                  ariaLabel="Jumlah baris per halaman"
+                  options={[10, 20, 50, 100].map((size) => ({
+                    value: String(size),
+                    label: String(size),
+                  }))}
+                  className="border-border-strong bg-surface h-9 w-[4.5rem] min-w-[4.5rem] rounded-[var(--radius-sm)] border px-2.5 text-sm font-bold shadow-[var(--shadow-xs)] hover:border-border-form-hover focus-visible:border-border-selected data-[state=open]:border-border-selected"
+                />
+              </div>
+            ) : null}
+            <div className="border-border bg-surface flex items-center gap-3 rounded-[var(--radius-md)] border px-3 py-2 shadow-[var(--shadow-xs)]">
+              <div>
+                <p className="text-muted-foreground text-[0.625rem] font-bold tracking-[0.14em] uppercase">
+                  Menampilkan
+                </p>
+                <p className="text-foreground mt-0.5 text-sm font-bold">
+                  {rangeStart}–{rangeEnd}
+                </p>
+              </div>
+              <span className="bg-border h-7 w-px" />
+              <div>
+                <p className="text-muted-foreground text-[0.625rem] font-bold tracking-[0.14em] uppercase">
+                  Total data
+                </p>
+                <p className="text-primary mt-0.5 text-sm font-bold">
+                  {resolvedTotalItems}
+                </p>
+              </div>
+            </div>
           </div>
+
+          {isPaginated ? (
+            <div className="flex w-full items-center gap-3 sm:w-auto">
+              <Typography variant="caption" className="hidden whitespace-nowrap sm:block">
+                Halaman <strong className="text-foreground">{currentPage}</strong>{' '}
+                dari <strong className="text-foreground">{Math.max(pageCount, 1)}</strong>
+              </Typography>
+              <div className="border-border bg-surface flex w-full items-center justify-between gap-1 rounded-[var(--radius-md)] border p-1 shadow-[var(--shadow-xs)] sm:w-auto sm:justify-start">
+                <PaginationButton
+                  ariaLabel="Halaman pertama"
+                  disabled={!table.getCanPreviousPage()}
+                  onClick={() => table.setPageIndex(0)}
+                >
+                  <ChevronsLeft />
+                </PaginationButton>
+                <PaginationButton
+                  ariaLabel="Halaman sebelumnya"
+                  disabled={!table.getCanPreviousPage()}
+                  onClick={() => table.previousPage()}
+                >
+                  <ChevronLeft />
+                </PaginationButton>
+                <span className="bg-primary text-primary-foreground grid size-9 shrink-0 place-items-center rounded-[var(--radius-sm)] text-sm font-bold shadow-[var(--shadow-xs)]">
+                  {currentPage}
+                </span>
+                <PaginationButton
+                  ariaLabel="Halaman berikutnya"
+                  disabled={!table.getCanNextPage()}
+                  onClick={() => table.nextPage()}
+                >
+                  <ChevronRight />
+                </PaginationButton>
+                <PaginationButton
+                  ariaLabel="Halaman terakhir"
+                  disabled={!table.getCanNextPage()}
+                  onClick={() => table.setPageIndex(Math.max(pageCount - 1, 0))}
+                >
+                  <ChevronsRight />
+                </PaginationButton>
+              </div>
+            </div>
+          ) : null}
         </div>
-      )}
+      ) : null}
     </div>
+  )
+}
+
+function PaginationButton({
+  children,
+  ariaLabel,
+  disabled,
+  onClick,
+}: {
+  children: ReactNode
+  ariaLabel: string
+  disabled: boolean
+  onClick: () => void
+}) {
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      aria-label={ariaLabel}
+      disabled={disabled}
+      onClick={onClick}
+      className="text-primary hover:bg-primary-subtle hover:text-primary active:bg-primary-subtle-hover size-9 rounded-[var(--radius-sm)] disabled:bg-transparent"
+    >
+      {children}
+    </Button>
   )
 }

@@ -10,7 +10,7 @@ import type { ResourceConfig, ResourceValues } from './resource-form.types'
 import { hasPermission } from '@/app/config/permissions'
 import { useAuthStore } from '@/features/auth/hooks/use-auth-store'
 import { DescriptionList } from '@/shared/components/data-display'
-import { ErrorState, LoadingState } from '@/shared/components/feedback'
+import { ErrorState } from '@/shared/components/feedback'
 import { DataTable } from '@/shared/components/tables'
 import {
   Alert,
@@ -25,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
   IconButton,
+  Skeleton,
   buttonVariants,
 } from '@/shared/components/ui'
 import { FormActions, FormSection } from '@/shared/design-system/form'
@@ -218,6 +219,7 @@ export function ResourceManagementPage<T extends BaseEntity>({
           columns={columns}
           data={listQuery.data?.data ?? []}
           pageCount={listQuery.data?.meta.total_pages ?? 1}
+          totalItems={listQuery.data?.meta.total ?? 0}
           pagination={pagination}
           onPaginationChange={setPagination}
           search={search}
@@ -331,7 +333,7 @@ export function ResourceEditorPage<T extends BaseEntity>({
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [apiErrors, setApiErrors] = useState<Record<string, string[]>>()
-  const detailQuery = useQuery({
+  const detailQuery = useQuery<T, Error, T, [string, string, string]>({
     queryKey: [config.queryKey, 'detail', id],
     queryFn: () => getResource<T>(config.endpoint, id),
     enabled: mode === 'edit' && Boolean(id),
@@ -358,7 +360,16 @@ export function ResourceEditorPage<T extends BaseEntity>({
     onError: (error: ApiError) => setApiErrors(error.errors),
   })
 
-  if (detailQuery.isPending && mode === 'edit') return <LoadingState />
+  if (detailQuery.isPending && mode === 'edit') {
+    return (
+      <ResourceEditorSkeleton
+        config={config}
+        mode={mode}
+        listPath={listPath}
+        eyebrow={eyebrow}
+      />
+    )
+  }
   if (detailQuery.isError)
     return (
       <ErrorState
@@ -438,13 +449,21 @@ export function ResourceDetailPage<T extends BaseEntity>({
 }: ResourceDetailPageProps<T>) {
   const { id = '' } = useParams()
   const granted = useAuthStore((state) => state.user?.permissions ?? [])
-  const query = useQuery({
+  const query = useQuery<T, Error, T, [string, string, string]>({
     queryKey: [config.queryKey, 'detail', id],
     queryFn: () => getResource<T>(config.endpoint, id),
     enabled: Boolean(id),
   })
 
-  if (query.isPending) return <LoadingState />
+  if (query.isPending) {
+    return (
+      <ResourceDetailSkeleton
+        config={config}
+        listPath={listPath}
+        eyebrow={eyebrow}
+      />
+    )
+  }
   if (query.isError || !query.data)
     return (
       <ErrorState
@@ -576,6 +595,77 @@ function defaultValues<T extends BaseEntity>(
       field.defaultValue ??
         (field.type === 'switch' ? false : field.type === 'number' ? 0 : ''),
     ]),
+  )
+}
+
+function ResourceDetailSkeleton<T extends BaseEntity>({
+  config,
+  listPath,
+  eyebrow,
+}: {
+  config: ResourceConfig<T>
+  listPath: string
+  eyebrow: string
+}) {
+  return (
+    <div className="enter-animation space-y-6" aria-busy="true">
+      <PageHeader
+        eyebrow={eyebrow}
+        title={config.name}
+        description="Menyiapkan detail data terbaru…"
+        backTo={listPath}
+      />
+      <Card>
+        <CardContent>
+          <div className="grid gap-x-8 gap-y-6 md:grid-cols-2 xl:grid-cols-3">
+            {config.fields
+              .filter((field) => field.type !== 'password')
+              .map((field) => (
+                <div key={field.key} className="space-y-2">
+                  <Skeleton className="h-3 w-24" />
+                  <Skeleton className="h-5 w-40 max-w-full" />
+                </div>
+              ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+function ResourceEditorSkeleton<T extends BaseEntity>({
+  config,
+  mode,
+  listPath,
+  eyebrow,
+}: {
+  config: ResourceConfig<T>
+  mode: 'create' | 'edit'
+  listPath: string
+  eyebrow: string
+}) {
+  return (
+    <div className="enter-animation space-y-6" aria-busy="true">
+      <PageHeader
+        eyebrow={eyebrow}
+        title={`${mode === 'create' ? 'Tambah' : 'Edit'} ${config.name}`}
+        description="Menyiapkan struktur formulir…"
+        backTo={listPath}
+      />
+      <FormSection
+        title={`Informasi ${config.name}`}
+        description="Kolom bertanda bintang wajib diisi."
+      >
+        <div className="grid gap-4 md:grid-cols-2">
+          {config.fields.map((field) => (
+            <div key={field.key} className="space-y-2">
+              <Skeleton className="h-3 w-28" />
+              <Skeleton className="h-[var(--control-md)] w-full rounded-[var(--radius-md)]" />
+            </div>
+          ))}
+        </div>
+      </FormSection>
+    </div>
   )
 }
 

@@ -100,6 +100,7 @@ export function StudentListPage() {
           columns={studentColumns}
           data={query.data?.data ?? []}
           pageCount={query.data?.meta?.total_pages ?? 1}
+          totalItems={query.data?.meta?.total ?? 0}
           pagination={pagination}
           onPaginationChange={setPagination}
           search={search}
