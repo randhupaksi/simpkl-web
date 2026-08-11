@@ -20,6 +20,13 @@ export function normalizeApiError(error: unknown): ApiError {
   }
 
   if (!error.response) {
+    if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
+      return {
+        message:
+          'Server membutuhkan waktu terlalu lama untuk merespons. Periksa koneksi database lalu coba lagi.',
+        code: 'REQUEST_TIMEOUT',
+      }
+    }
     return {
       message: 'Tidak dapat terhubung ke server. Periksa koneksi Anda.',
       code: 'NETWORK_ERROR',

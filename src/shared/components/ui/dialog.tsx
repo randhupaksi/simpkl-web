@@ -33,6 +33,12 @@ export const DialogContent = forwardRef<
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
+      tabIndex={-1}
+      onOpenAutoFocus={(event) => {
+        event.preventDefault()
+        const content = event.currentTarget as HTMLElement
+        content.focus({ preventScroll: true })
+      }}
       className={cn(
         'border-border bg-surface enter-animation fixed top-1/2 left-1/2 z-[var(--z-dialog)] grid max-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-5 overflow-y-auto rounded-[var(--radius-xl)] border p-6 shadow-[var(--shadow-lg)] outline-none',
         className,

@@ -85,7 +85,7 @@ export function Combobox({
                 role="option"
                 aria-selected={option.value === value}
                 disabled={option.disabled}
-                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-selected:border-primary-subtle-hover aria-selected:bg-primary-subtle-hover aria-selected:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-selected:font-semibold"
+                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-selected:border-primary-subtle-hover aria-selected:bg-primary-subtle aria-selected:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-selected:font-semibold"
                 onClick={() => {
                   onValueChange(option.value)
                   setOpen(false)
@@ -159,7 +159,7 @@ export function MultiSelect({
                 type="button"
                 aria-pressed={isSelected}
                 disabled={option.disabled}
-                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-pressed:border-primary-subtle-hover aria-pressed:bg-primary-subtle-hover aria-pressed:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-pressed:font-semibold"
+                className="interactive-surface hover:border-primary-subtle-hover hover:bg-primary-subtle active:bg-primary-subtle-hover aria-pressed:border-primary-subtle-hover aria-pressed:bg-primary-subtle aria-pressed:text-primary disabled:text-disabled-foreground flex w-full items-center gap-2 rounded-[var(--radius-sm)] border border-transparent px-3 py-2.5 text-left text-sm aria-pressed:font-semibold"
                 onClick={() =>
                   onValueChange(
                     isSelected

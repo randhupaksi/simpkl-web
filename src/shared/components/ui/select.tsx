@@ -69,7 +69,7 @@ export function Select({
                 key={option.value}
                 value={option.value}
                 disabled={option.disabled}
-                className="interactive-surface data-[highlighted]:border-primary-subtle-hover data-[highlighted]:bg-primary-subtle data-[state=checked]:border-primary-subtle-hover data-[state=checked]:bg-primary-subtle-hover data-[state=checked]:text-primary data-[disabled]:text-disabled-foreground relative flex cursor-pointer items-center rounded-[var(--radius-sm)] border border-transparent py-2.5 pr-9 pl-3 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[state=checked]:font-semibold"
+                className="interactive-surface data-[highlighted]:border-primary-subtle-hover data-[highlighted]:bg-primary-subtle data-[state=checked]:border-primary-subtle-hover data-[state=checked]:bg-primary-subtle data-[state=checked]:text-primary data-[disabled]:text-disabled-foreground relative flex cursor-pointer items-center rounded-[var(--radius-sm)] border border-transparent py-2.5 pr-9 pl-3 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[state=checked]:font-semibold"
               >
                 <SelectPrimitive.ItemText>
                   {option.label}

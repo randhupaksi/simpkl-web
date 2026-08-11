@@ -13,7 +13,7 @@ export const TabsList = forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      'border-border bg-surface-muted inline-flex min-h-11 items-center gap-1 rounded-[var(--radius-md)] border p-1',
+      'border-border bg-surface-muted scrollbar-subtle flex min-h-12 w-full min-w-0 items-center gap-1 overflow-x-auto rounded-[var(--radius-md)] border p-1.5',
       className,
     )}
     {...props}
@@ -29,7 +29,7 @@ export const TabsTrigger = forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'interactive-surface pressed-feedback text-muted-foreground hover:bg-surface-hover hover:text-foreground active:bg-surface-pressed data-[state=active]:bg-surface data-[state=active]:text-foreground disabled:text-disabled-foreground min-h-9 rounded-[var(--radius-sm)] px-3 text-sm font-medium outline-none focus-visible:shadow-[var(--shadow-focus)] disabled:pointer-events-none data-[state=active]:shadow-[var(--shadow-xs)]',
+      'interactive-surface pressed-feedback text-muted-foreground hover:bg-surface-hover hover:text-foreground active:bg-surface-pressed disabled:text-disabled-foreground flex min-h-10 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-sm)] border border-transparent px-4 text-sm font-semibold outline-none transition-colors focus-visible:shadow-[var(--shadow-focus)] disabled:pointer-events-none data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[var(--shadow-sm)]',
       className,
     )}
     {...props}

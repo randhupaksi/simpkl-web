@@ -40,7 +40,7 @@ const calendarClassNames = {
   day_button:
     'inline-flex size-9 items-center justify-center rounded-[var(--radius-sm)] text-sm text-foreground outline-none transition-colors hover:bg-primary-subtle-hover hover:text-primary focus-visible:ring-2 focus-visible:ring-[var(--border-selected)]',
   selected:
-    'bg-primary-subtle-hover text-primary hover:bg-primary-subtle-hover hover:text-primary',
+    'rounded-[var(--radius-sm)] bg-primary-subtle-hover text-primary hover:bg-primary-subtle-hover hover:text-primary',
   today: 'font-bold text-primary',
   outside: 'text-muted-foreground/40',
   disabled: 'pointer-events-none text-disabled-foreground opacity-50',
