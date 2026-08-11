@@ -1,6 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { LoaderCircle } from 'lucide-react'
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react'
+import { Slot } from '@radix-ui/react-slot'
 
 import { cn } from '@/shared/lib/utils'
 
@@ -42,6 +43,7 @@ export interface ButtonProps
   isLoading?: boolean
   loadingText?: string
   startIcon?: ReactNode
+  asChild?: boolean
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -53,29 +55,46 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       isLoading,
       loadingText,
       startIcon,
+      asChild = false,
       type = 'button',
       variant,
       size,
       ...props
     },
     ref,
-  ) => (
-    <button
-      ref={ref}
-      type={type}
-      disabled={disabled || isLoading}
-      aria-busy={isLoading || undefined}
-      className={cn(buttonVariants({ variant, size }), className)}
-      {...props}
-    >
-      {isLoading ? (
-        <LoaderCircle className="animate-spin" aria-hidden="true" />
-      ) : (
-        startIcon
-      )}
-      {isLoading && loadingText ? loadingText : children}
-    </button>
-  ),
+  ) => {
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          aria-disabled={disabled || isLoading ? true : undefined}
+          aria-busy={isLoading || undefined}
+          className={cn(buttonVariants({ variant, size }), className)}
+          {...props}
+        >
+          {children}
+        </Slot>
+      )
+    }
+
+    return (
+      <button
+        ref={ref}
+        type={type}
+        disabled={disabled || isLoading}
+        aria-busy={isLoading || undefined}
+        className={cn(buttonVariants({ variant, size }), className)}
+        {...props}
+      >
+        {isLoading ? (
+          <LoaderCircle className="animate-spin" aria-hidden="true" />
+        ) : (
+          startIcon
+        )}
+        {isLoading && loadingText ? loadingText : children}
+      </button>
+    )
+  },
 )
 
 Button.displayName = 'Button'

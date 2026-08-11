@@ -1,14 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Eye, MoreHorizontal } from 'lucide-react'
+import { Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  IconButton,
-} from '@/shared/components/ui'
+import { IconButton } from '@/shared/components/ui'
 import { StatusBadge } from '@/shared/design-system/status'
 import type { Student } from '@/shared/types'
 import { compactId } from '@/shared/utils'
@@ -77,21 +71,11 @@ export function createStudentColumns(
     header: 'Aksi',
     enableHiding: false,
     cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi siswa" tone="neutral" size="sm">
-            <MoreHorizontal />
-          </IconButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link to={`/students/${row.original.id}`}>
-              <Eye />
-              Lihat detail
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <IconButton asChild aria-label="Lihat detail siswa" tone="view" size="sm">
+        <Link to={`/students/${row.original.id}`}>
+          <Eye />
+        </Link>
+      </IconButton>
     ),
   },
   ]

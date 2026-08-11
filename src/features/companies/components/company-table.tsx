@@ -1,14 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Eye, MoreHorizontal } from 'lucide-react'
+import { Eye } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  IconButton,
-} from '@/shared/components/ui'
+import { IconButton } from '@/shared/components/ui'
 import { StatusBadge } from '@/shared/design-system/status'
 import type { Company } from '@/shared/types'
 import { formatDate } from '@/shared/utils'
@@ -66,21 +60,11 @@ export const companyColumns: ColumnDef<Company>[] = [
     header: 'Aksi',
     enableHiding: false,
     cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi perusahaan" tone="neutral" size="sm">
-            <MoreHorizontal />
-          </IconButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link to={`/companies/${row.original.id}`}>
-              <Eye />
-              Lihat detail
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <IconButton asChild aria-label="Lihat detail perusahaan" tone="view" size="sm">
+        <Link to={`/companies/${row.original.id}`}>
+          <Eye />
+        </Link>
+      </IconButton>
     ),
   },
 ]

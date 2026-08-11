@@ -1,14 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Eye, MoreHorizontal, Repeat2 } from 'lucide-react'
+import { Eye, Repeat2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  IconButton,
-} from '@/shared/components/ui'
+import { IconButton } from '@/shared/components/ui'
 import { StatusBadge } from '@/shared/design-system/status'
 import type { Placement } from '@/shared/types'
 import { compactId, formatDate, getStatusLabel } from '@/shared/utils'
@@ -74,27 +68,28 @@ export function createPlacementColumns(
     header: 'Aksi',
     enableHiding: false,
     cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <IconButton aria-label="Aksi penempatan" tone="neutral" size="sm">
-            <MoreHorizontal />
-          </IconButton>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link to={`/placements/${row.original.id}`}>
-              <Eye />
-              Lihat detail
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to={`/placements/${row.original.id}/transfer`}>
-              <Repeat2 />
-              Transfer penempatan
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center justify-center gap-2">
+        <IconButton
+          asChild
+          aria-label="Lihat detail penempatan"
+          tone="view"
+          size="sm"
+        >
+          <Link to={`/placements/${row.original.id}`}>
+            <Eye />
+          </Link>
+        </IconButton>
+        <IconButton
+          asChild
+          aria-label="Transfer penempatan"
+          tone="edit"
+          size="sm"
+        >
+          <Link to={`/placements/${row.original.id}/transfer`}>
+            <Repeat2 />
+          </Link>
+        </IconButton>
+      </div>
     ),
   },
   ]
