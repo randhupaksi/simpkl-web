@@ -78,15 +78,16 @@ export function DocumentUploadDialog() {
       <DialogTrigger asChild>
         <Button startIcon={<FileUp />}>Unggah dokumen</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="flex max-w-2xl flex-col gap-0 overflow-hidden p-0">
+        <DialogHeader className="border-border shrink-0 border-b px-6 py-5">
           <DialogTitle>Unggah dokumen privat</DialogTitle>
           <DialogDescription>
             File dikirim ke endpoint privat dan tidak pernah menggunakan URL
             publik.
           </DialogDescription>
         </DialogHeader>
-        <form className="space-y-5" onSubmit={onSubmit}>
+        <form className="flex min-h-0 flex-1 flex-col" onSubmit={onSubmit}>
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto px-6 py-6">
           <FormSubsection
             title="A. Berkas dan klasifikasi"
             description="Pilih file privat beserta tipe dokumen yang sesuai."
@@ -270,7 +271,8 @@ export function DocumentUploadDialog() {
               {...register('notes')}
             />
           </FormField>
-          <DialogFooter>
+          </div>
+          <DialogFooter className="border-border bg-surface shrink-0 border-t px-6 py-4">
             <Button
               variant="outline"
               onClick={() => setOpen(false)}

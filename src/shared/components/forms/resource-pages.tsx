@@ -609,21 +609,23 @@ function ResourceFormDialog<T extends BaseEntity>({
 }: ResourceFormDialogProps<T>) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
+      <DialogContent className="flex max-w-3xl flex-col gap-0 overflow-hidden p-0">
+        <DialogHeader className="border-border shrink-0 border-b px-6 py-5">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <ResourceForm
-          id={formId}
-          fields={config.fields}
-          schema={schema ?? config.schema}
-          defaultValues={values ?? defaultValues(config)}
-          isCreate={isCreate}
-          apiErrors={apiErrors}
-          onSubmit={onSubmit}
-        />
-        <DialogFooter>
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+          <ResourceForm
+            id={formId}
+            fields={config.fields}
+            schema={schema ?? config.schema}
+            defaultValues={values ?? defaultValues(config)}
+            isCreate={isCreate}
+            apiErrors={apiErrors}
+            onSubmit={onSubmit}
+          />
+        </div>
+        <DialogFooter className="border-border bg-surface shrink-0 border-t px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Batal
           </Button>
