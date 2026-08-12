@@ -50,7 +50,7 @@ export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
   }
 
   return (
-    <header className="border-border bg-surface/95 sticky top-0 z-[var(--z-sticky)] flex h-[5.25rem] items-center gap-4 border-b px-4 backdrop-blur sm:px-7">
+    <header className="border-border bg-surface/95 sticky top-0 z-[var(--z-sticky)] flex min-w-0 h-[5.25rem] items-center gap-4 overflow-hidden border-b px-4 backdrop-blur sm:px-7">
       <IconButton
         aria-label="Buka navigasi"
         variant="outline"

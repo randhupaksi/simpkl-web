@@ -41,21 +41,32 @@ export function DashboardSidebar({
           collapsed ? 'justify-center px-2' : 'px-5',
         )}
       >
-        <div className="flex min-w-0 items-center gap-3">
+        <div
+          className={cn(
+            'flex min-w-0 items-center',
+            collapsed ? 'gap-0' : 'gap-3',
+          )}
+        >
           <span className="bg-sidebar-active text-sidebar-active-foreground relative grid size-11 shrink-0 place-items-center rounded-[var(--radius-lg)] shadow-[0_8px_20px_rgb(20_159_145_/_0.2)]">
             <School className="size-[1.35rem]" />
             <span className="border-sidebar-background absolute right-0.5 bottom-0.5 size-2 rounded-full border-2 bg-[#8de0c0]" />
           </span>
-          {!collapsed ? (
-            <div className="min-w-0">
-              <p className="text-inverse-foreground truncate text-[0.9375rem] font-bold tracking-[-0.02em]">
-                SIMPKL
-              </p>
-              <p className="text-sidebar-muted mt-0.5 truncate text-[0.6875rem] tracking-wide">
-                Practical Work Placement Management
-              </p>
-            </div>
-          ) : null}
+          <div
+            className={cn(
+              'min-w-0 overflow-hidden transition-opacity duration-[var(--duration-fast)] ease-[var(--ease-standard)]',
+              collapsed
+                ? 'max-w-0 -translate-x-2 opacity-0'
+                : 'max-w-56 translate-x-0 opacity-100',
+            )}
+            aria-hidden={collapsed}
+          >
+            <p className="text-inverse-foreground truncate text-[0.9375rem] font-bold tracking-[-0.02em]">
+              SIMPKL
+            </p>
+            <p className="text-sidebar-muted mt-0.5 truncate text-[0.6875rem] tracking-wide">
+              Practical Work Placement Management
+            </p>
+          </div>
         </div>
       </div>
 
@@ -77,11 +88,17 @@ export function DashboardSidebar({
 
             return (
               <section key={group.label}>
-                {!collapsed ? (
-                  <p className="text-sidebar-muted mb-2.5 px-3 text-[0.625rem] font-bold tracking-[0.18em] uppercase">
-                    {group.label}
-                  </p>
-                ) : null}
+                <p
+                  className={cn(
+                    'text-sidebar-muted overflow-hidden text-[0.625rem] font-bold tracking-[0.18em] uppercase transition-opacity duration-[var(--duration-fast)] ease-[var(--ease-standard)]',
+                    collapsed
+                      ? 'mb-0 max-h-0 px-3 py-0 opacity-0'
+                      : 'mb-2.5 max-h-6 px-3 opacity-100',
+                  )}
+                  aria-hidden={collapsed}
+                >
+                  {group.label}
+                </p>
                 <div className="space-y-0.5">
                   {visibleItems.map((item) => {
                     const Icon = item.icon
@@ -93,19 +110,27 @@ export function DashboardSidebar({
                           cn(
                             'interactive-surface pressed-feedback group hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed relative flex min-h-11 items-center rounded-[var(--radius-md)] border-l-2 border-l-transparent text-sm font-medium outline-none focus-visible:shadow-[0_0_0_3px_color-mix(in_srgb,var(--sidebar-active)_30%,transparent)]',
                             collapsed
-                              ? 'mx-auto size-12 justify-center border-l-0 px-0'
+                              ? 'mx-auto size-12 justify-center border border-transparent border-l-0 px-0 shadow-none'
                               : 'gap-3 px-3.5',
                             isActive &&
                               (collapsed
-                                ? 'ring-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)] ring-1 ring-inset'
+                                ? 'border-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'
                                 : 'border-l-sidebar-active bg-sidebar-surface text-sidebar-active-foreground hover:bg-sidebar-surface active:bg-sidebar-surface shadow-[0_8px_18px_rgb(3_10_20_/_0.12)]'),
                           )
                         }
                       >
                         <Icon className="size-[1.125rem] shrink-0" />
-                        {!collapsed ? (
-                          <span className="truncate">{item.label}</span>
-                        ) : null}
+                        <span
+                          className={cn(
+                            'overflow-hidden truncate whitespace-nowrap transition-opacity duration-[var(--duration-fast)] ease-[var(--ease-standard)]',
+                            collapsed
+                              ? 'max-w-0 translate-x-2 opacity-0'
+                              : 'max-w-48 translate-x-0 opacity-100',
+                          )}
+                          aria-hidden={collapsed}
+                        >
+                          {item.label}
+                        </span>
                       </NavLink>
                     )
 
@@ -134,7 +159,7 @@ export function DashboardSidebar({
               aria-label={collapsed ? 'Perluas sidebar' : 'Ringkas sidebar'}
               variant="ghost"
               className={cn(
-                'text-sidebar-muted hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed',
+                'relative text-sidebar-muted hover:bg-sidebar-hover hover:text-inverse-foreground active:bg-sidebar-pressed',
                 collapsed ? 'mx-auto size-12' : 'w-full',
               )}
               onClick={() => onCollapsedChange(!collapsed)}
@@ -142,12 +167,21 @@ export function DashboardSidebar({
               <ChevronLeft
                 className={cn(
                   'transition-transform duration-[var(--duration-normal)]',
+                  !collapsed && 'absolute left-1/2 -translate-x-20',
                   collapsed && 'rotate-180',
                 )}
               />
-              {!collapsed ? (
-                <span className="ml-2 text-sm">Ringkas sidebar</span>
-              ) : null}
+              <span
+                className={cn(
+                  'overflow-hidden whitespace-nowrap text-sm transition-opacity duration-[var(--duration-fast)] ease-[var(--ease-standard)]',
+                  collapsed
+                    ? 'max-w-0 translate-x-2 opacity-0'
+                    : 'max-w-40 translate-x-0 opacity-100',
+                )}
+                aria-hidden={collapsed}
+              >
+                Ringkas sidebar
+              </span>
             </IconButton>
           </TooltipTrigger>
           {collapsed ? (
