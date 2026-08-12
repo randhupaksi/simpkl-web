@@ -52,6 +52,8 @@ export const placementConfig: ResourceConfig<Placement> = {
       optionsParams: (values) => ({
         student_id:
           typeof values.student_id === 'string' ? values.student_id : undefined,
+        company_id:
+          typeof values.company_id === 'string' ? values.company_id : undefined,
       }),
       placeholder: 'Pilih perusahaan',
       section: { title: 'A. Peserta dan tujuan', description: 'Tentukan periode, siswa, perusahaan, dan pihak yang terlibat.' },
