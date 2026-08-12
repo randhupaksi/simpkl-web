@@ -39,8 +39,8 @@ export const userConfig: ResourceConfig<UserAccount> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'name', label: 'Nama lengkap', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
-    { key: 'username', label: 'Username', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
+    { key: 'name', label: 'Nama lengkap', required: true, maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
+    { key: 'username', label: 'Username', required: true, maxLength: 80, sanitizer: 'username', hint: 'Gunakan huruf, angka, titik, garis bawah, atau tanda hubung tanpa spasi.', section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
     { key: 'email', label: 'Email', type: 'email', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
     {
       key: 'password',

@@ -1,13 +1,16 @@
 import { z } from 'zod'
 
-import { optionalEmail, requiredText } from '@/shared/schemas'
+import { optionalEmail, requiredPersonName, requiredText } from '@/shared/schemas'
 
 const userBaseSchema = z.object({
-  name: requiredText('Nama pengguna', 150),
+  name: requiredPersonName('Nama pengguna', 150),
   email: optionalEmail.refine((value) => value.length > 0, {
     message: 'Email wajib diisi',
   }),
-  username: requiredText('Username', 80),
+  username: requiredText('Username', 80).regex(
+    /^[a-zA-Z0-9._-]+$/,
+    'Username hanya boleh berisi huruf, angka, titik, garis bawah, atau tanda hubung',
+  ),
   major_id: z.union([z.literal(''), z.uuid()]),
   class_id: z.union([z.literal(''), z.uuid()]),
   status: z.enum(['active', 'inactive', 'locked']),
