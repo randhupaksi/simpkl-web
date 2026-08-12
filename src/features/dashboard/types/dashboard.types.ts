@@ -35,6 +35,7 @@ export interface DashboardBreakdown {
 
 export interface DashboardMajorProgress {
   major_id: string
+  major_code: string
   major_name: string
   total_students: number
   placed_students: number

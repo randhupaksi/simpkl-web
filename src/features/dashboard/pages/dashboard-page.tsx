@@ -233,7 +233,7 @@ export function DashboardPage() {
         </div>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4" aria-label="Ringkasan utama">
+      <section className="grid items-start gap-4 lg:grid-cols-2 xl:grid-cols-4" aria-label="Ringkasan utama">
         <OperationalMetric
           label="Sedang menjalani PKL"
           value={summary.active_placements}
@@ -268,7 +268,7 @@ export function DashboardPage() {
         />
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(20rem,0.82fr)]">
+      <section className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(20rem,0.82fr)]">
         <Card className="overflow-hidden">
           <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -325,7 +325,7 @@ export function DashboardPage() {
               <Typography variant="muted" className="mt-1">Masuk langsung ke pekerjaan utama tanpa mencari menu.</Typography>
             </div>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid items-start gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {availableActions.map((action) => {
               const Icon = action.icon
               return (
@@ -345,7 +345,7 @@ export function DashboardPage() {
         </section>
       ) : null}
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
+      <section className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(20rem,0.9fr)]">
         <Card>
           <CardHeader>
             <p className="text-foreground text-base font-bold">Progres penempatan per jurusan</p>
@@ -356,7 +356,7 @@ export function DashboardPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={summary.major_progress} margin={{ top: 12, right: 8, left: -20, bottom: 4 }}>
                   <CartesianGrid vertical={false} stroke="var(--border-subtle)" />
-                  <XAxis dataKey="major_name" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
+                  <XAxis dataKey="major_code" axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
                   <YAxis allowDecimals={false} axisLine={false} tickLine={false} tick={{ fill: 'var(--muted-foreground)', fontSize: 11 }} />
                   <ChartTooltip contentStyle={chartTooltipStyle} cursor={{ fill: 'var(--surface-hover)' }} />
                   <Bar dataKey="total_students" name="Total peserta" fill="var(--surface-muted)" radius={[6, 6, 0, 0]} />
@@ -399,7 +399,7 @@ export function DashboardPage() {
         </Card>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
+      <section className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
         <ReadinessCard ready={summary.readiness.ready} attention={summary.readiness.attention} incomplete={summary.readiness.incomplete} total={summary.readiness.total} average={summary.readiness.average} />
         <ActivityCard activities={summary.recent_activities} />
       </section>
