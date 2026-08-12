@@ -55,6 +55,39 @@
     font: inherit;
   }
 
+  /* PasswordInput menyediakan kontrol tampil/sembunyikan sendiri. */
+  input[type='password']::-ms-reveal,
+  input[type='password']::-ms-clear {
+    display: none;
+  }
+
+  [data-sonner-toast][data-type='success'] {
+    border-color: var(--success-border) !important;
+    background: var(--success-subtle) !important;
+  }
+
+  [data-sonner-toast][data-type='error'] {
+    border-color: var(--danger-border) !important;
+    background: var(--danger-subtle) !important;
+  }
+
+  [data-sonner-toast][data-type='warning'] {
+    border-color: var(--warning-border) !important;
+    background: var(--warning-subtle) !important;
+  }
+
+  [data-sonner-toast][data-type='info'] {
+    border-color: var(--info-border) !important;
+    background: var(--info-subtle) !important;
+  }
+
+  [data-sonner-toast] [data-icon] {
+    display: grid;
+    place-items: center;
+    align-self: flex-start;
+    margin-top: 1px;
+  }
+
   button,
   a {
     -webkit-tap-highlight-color: transparent;

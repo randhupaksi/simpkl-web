@@ -42,7 +42,7 @@ export function LoginPage() {
     try {
       await loginMutation.mutateAsync(values)
       toast.success('Login berhasil', {
-        description: 'Welcome to SIMPKL.',
+        description: 'Selamat datang kembali di SIMPKL.',
       })
       const state = location.state as LoginLocationState | null
       navigate(state?.from ?? ROUTE_PATHS.dashboard, { replace: true })
