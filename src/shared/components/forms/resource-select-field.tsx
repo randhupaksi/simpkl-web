@@ -9,6 +9,7 @@ type ResourceOption = BaseEntity & Record<string, unknown>
 
 type ResourceSelectFieldProps = {
   endpoint: string
+  cacheKey?: string
   value?: string
   onChange: (value: string) => void
   labelKey?: string
@@ -23,6 +24,7 @@ type ResourceSelectFieldProps = {
 
 export function ResourceSelectField({
   endpoint,
+  cacheKey,
   value,
   onChange,
   labelKey = 'name',
@@ -35,7 +37,13 @@ export function ResourceSelectField({
   emptyLabel,
 }: ResourceSelectFieldProps) {
   const query = useQuery({
-    queryKey: ['resource-options', endpoint, queryParams, dependentValue],
+    queryKey: [
+      'resource-options',
+      endpoint,
+      cacheKey,
+      queryParams,
+      dependentValue,
+    ],
     queryFn: () =>
       getResourceList<ResourceOption>(endpoint, {
         page: 1,

@@ -7,6 +7,13 @@ export type ResourceValue =
 
 export type ResourceValues = Record<string, ResourceValue>
 
+export type ResourceInputSanitizer =
+  | 'digits'
+  | 'person-name'
+  | 'phone'
+  | 'academic-year'
+  | 'username'
+
 export type ResourceField = {
   key: string
   label: string
@@ -25,6 +32,9 @@ export type ResourceField = {
     | 'switch'
   placeholder?: string
   hint?: string
+  inputMode?: 'text' | 'numeric' | 'tel' | 'email' | 'url'
+  maxLength?: number
+  sanitizer?: ResourceInputSanitizer
   required?: boolean
   options?: { value: string; label: string }[]
   optionsEndpoint?: string

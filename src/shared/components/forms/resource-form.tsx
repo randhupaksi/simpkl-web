@@ -4,7 +4,11 @@ import { Controller, useForm, useWatch } from 'react-hook-form'
 import type { ZodType } from 'zod'
 
 import { ResourceSelectField } from './resource-select-field'
-import type { ResourceField, ResourceValues } from './resource-form.types'
+import type {
+  ResourceField,
+  ResourceInputSanitizer,
+  ResourceValues,
+} from './resource-form.types'
 import { DatePicker, Input, Select, Switch, Textarea } from '@/shared/components/ui'
 import { FormField } from '@/shared/design-system/form'
 
@@ -196,6 +200,7 @@ function renderControl(
     return (
       <ResourceSelectField
         endpoint={field.optionsEndpoint}
+        cacheKey={field.key}
         value={typeof value === 'string' ? value : ''}
         onChange={onChange}
         dependentValue={normalizedDependentValue}
@@ -273,10 +278,12 @@ function renderControl(
         onChange(
           field.type === 'number'
             ? event.target.valueAsNumber
-            : event.target.value,
+            : sanitizeInput(event.target.value, field.sanitizer, field.maxLength),
         )
       }
       placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
+      inputMode={field.inputMode}
+      maxLength={field.maxLength}
       aria-describedby={describedBy}
       invalid={invalid}
     />
@@ -284,6 +291,38 @@ function renderControl(
 }
 
 type ResourceValueForControl = string | number | boolean
+
+function sanitizeInput(
+  value: string,
+  sanitizer: ResourceInputSanitizer | undefined,
+  maxLength: number | undefined,
+) {
+  let sanitized = value
+
+  if (sanitizer === 'digits') {
+    sanitized = value.replace(/\D/g, '')
+  }
+
+  if (sanitizer === 'person-name') {
+    sanitized = value.replace(/[^\p{L}\s.'’,-]/gu, '')
+  }
+
+  if (sanitizer === 'phone') {
+    const hasInternationalPrefix = value.trimStart().startsWith('+')
+    sanitized = `${hasInternationalPrefix ? '+' : ''}${value.replace(/\D/g, '')}`
+  }
+
+  if (sanitizer === 'academic-year') {
+    const digits = value.replace(/\D/g, '').slice(0, 8)
+    sanitized = digits.length > 4 ? `${digits.slice(0, 4)}/${digits.slice(4)}` : digits
+  }
+
+  if (sanitizer === 'username') {
+    sanitized = value.replace(/[^a-zA-Z0-9._-]/g, '')
+  }
+
+  return maxLength ? sanitized.slice(0, maxLength) : sanitized
+}
 
 function getDefaultPlaceholder(field: ResourceField) {
   const label = field.label.toLocaleLowerCase('id')
