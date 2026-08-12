@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 import {
   optionalEmail,
+  optionalPhone,
   optionalText,
   optionalUrl,
   requiredText,
@@ -17,8 +18,8 @@ export const companySchema = z
     district: optionalText(120),
     city: requiredText('Kota/kabupaten', 100),
     province: optionalText(120),
-    postal_code: optionalText(12),
-    phone: optionalText(30),
+    postal_code: z.union([z.literal(''), z.string().regex(/^\d{5}$/, 'Kode pos harus terdiri dari 5 angka')]),
+    phone: optionalPhone(),
     email: optionalEmail,
     website: optionalUrl,
     maps_url: optionalUrl,
