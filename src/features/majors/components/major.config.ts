@@ -25,7 +25,7 @@ export const majorConfig: ResourceConfig<Major> = {
     { key: 'code', label: 'Kode jurusan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
     { key: 'abbreviation', label: 'Singkatan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
     { key: 'name', label: 'Nama jurusan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
-    { key: 'head_name', label: 'Kepala jurusan', section: { title: 'B. Pengelolaan jurusan', description: 'Penanggung jawab dan status referensi jurusan.' } },
+    { key: 'head_name', label: 'Kepala jurusan', maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'B. Pengelolaan jurusan', description: 'Penanggung jawab dan status referensi jurusan.' } },
     {
       key: 'status',
       label: 'Status',
