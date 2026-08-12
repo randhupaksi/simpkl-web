@@ -11,6 +11,7 @@ export const API_ENDPOINTS = {
   students: '/students',
   studentImport: '/students/import',
   companies: '/companies',
+  eligibleCompanies: '/companies/eligible',
   companyContacts: '/company-contacts',
   companyMajorCapacities: (id: string) => `/companies/${id}/major-capacities`,
   supervisors: '/supervisors',

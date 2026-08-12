@@ -2,14 +2,17 @@ import { z } from 'zod'
 
 import { optionalText, requiredText, requiredUuid } from '@/shared/schemas'
 
+const optionalUuid = z.union([z.literal(''), z.uuid()]).default('')
+const optionalTextWithDefault = optionalText(2000).default('')
+
 export const placementSchema = z
   .object({
     period_id: requiredUuid('Periode'),
     student_id: requiredUuid('Siswa'),
     company_id: requiredUuid('Perusahaan'),
-    company_contact_id: z.union([z.literal(''), z.uuid()]),
-    supervisor_id: z.union([z.literal(''), z.uuid()]),
-    previous_placement_id: z.union([z.literal(''), z.uuid()]),
+    company_contact_id: optionalUuid,
+    supervisor_id: optionalUuid,
+    previous_placement_id: optionalUuid,
     division: optionalText(120),
     position: optionalText(120),
     work_system: z.enum(['wfo', 'wfh', 'hybrid', 'company_policy']),
@@ -33,9 +36,9 @@ export const placementSchema = z
       'company_recruitment',
       'previous_partnership',
     ]),
-    override_reason: optionalText(2000),
-    transfer_reason: optionalText(2000),
-    notes: optionalText(2000),
+    override_reason: optionalTextWithDefault,
+    transfer_reason: optionalTextWithDefault,
+    notes: optionalTextWithDefault,
   })
   .refine((value) => value.end_date > value.start_date, {
     path: ['end_date'],
