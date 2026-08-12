@@ -14,6 +14,8 @@ import { ErrorState } from '@/shared/components/feedback'
 import { DataTable } from '@/shared/components/tables'
 import {
   Alert,
+  AlertDescription,
+  AlertTitle,
   Button,
   Card,
   CardContent,
@@ -41,6 +43,39 @@ import {
 } from '@/shared/services'
 import type { ApiError, BaseEntity } from '@/shared/types'
 import { formatDate, getStatusLabel } from '@/shared/utils'
+
+const ERROR_FIELD_BY_CODE: Record<string, string> = {
+  INVALID_DATE_RANGE: 'end_date',
+  PERIOD_NOT_FOUND: 'period_id',
+  PERIOD_CLOSED: 'period_id',
+  PLACEMENT_OUTSIDE_PERIOD: 'end_date',
+  STUDENT_NOT_AVAILABLE: 'student_id',
+  ACTIVE_PLACEMENT_EXISTS: 'student_id',
+  COMPANY_NOT_FOUND: 'company_id',
+  COMPANY_NOT_ALLOWED: 'company_id',
+  MAJOR_NOT_ACCEPTED: 'company_id',
+  COMPANY_CAPACITY_EXCEEDED: 'company_id',
+  MAJOR_CAPACITY_EXCEEDED: 'company_id',
+  INVALID_COMPANY_CONTACT: 'company_contact_id',
+  SUPERVISOR_NOT_AVAILABLE: 'supervisor_id',
+  SUPERVISOR_CAPACITY_EXCEEDED: 'supervisor_id',
+  INVALID_STATUS_TRANSITION: 'status',
+}
+
+function toFormErrors(error: ApiError): Record<string, string[]> {
+  const errors = error.errors ?? {}
+  const explicitField = Object.keys(errors).find(
+    (field) => field !== 'request' && field !== 'form',
+  )
+  if (explicitField) return errors
+
+  const field = error.code ? ERROR_FIELD_BY_CODE[error.code] : undefined
+  if (field) return { [field]: [error.message] }
+
+  return errors.form || errors.request
+    ? errors
+    : { form: [error.message] }
+}
 
 type ResourcePermissions = {
   create?: string
@@ -100,7 +135,7 @@ export function ResourceManagementPage<T extends BaseEntity>({
       setApiErrors(undefined)
       void invalidate()
     },
-    onError: (error: ApiError) => setApiErrors(error.errors),
+    onError: (error: ApiError) => setApiErrors(toFormErrors(error)),
   })
 
   const updateMutation = useMutation({
@@ -116,7 +151,7 @@ export function ResourceManagementPage<T extends BaseEntity>({
       setApiErrors(undefined)
       void invalidate()
     },
-    onError: (error: ApiError) => setApiErrors(error.errors),
+    onError: (error: ApiError) => setApiErrors(toFormErrors(error)),
   })
 
   const deleteMutation = useMutation({
@@ -333,6 +368,7 @@ export function ResourceEditorPage<T extends BaseEntity>({
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [apiErrors, setApiErrors] = useState<Record<string, string[]>>()
+  const [clientValidationError, setClientValidationError] = useState(false)
   const detailQuery = useQuery<T, Error, T, [string, string, string]>({
     queryKey: [config.queryKey, 'detail', id],
     queryFn: () => getResource<T>(config.endpoint, id),
@@ -357,7 +393,11 @@ export function ResourceEditorPage<T extends BaseEntity>({
       void queryClient.invalidateQueries({ queryKey: [config.queryKey] })
       navigate(`${listPath}/${item.id}`)
     },
-    onError: (error: ApiError) => setApiErrors(error.errors),
+    onError: (error: ApiError) => {
+      setApiErrors(toFormErrors(error))
+      setClientValidationError(false)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    },
   })
 
   if (detailQuery.isPending && mode === 'edit') {
@@ -386,9 +426,15 @@ export function ResourceEditorPage<T extends BaseEntity>({
         description={`Lengkapi informasi ${config.name.toLowerCase()} dan pastikan data sudah benar sebelum disimpan.`}
         backTo={listPath}
       />
-      {mutation.isError && !apiErrors ? (
-        <Alert tone="danger" title="Data belum dapat disimpan">
-          Periksa kembali isian atau coba beberapa saat lagi.
+      {mutation.isError || clientValidationError ? (
+        <Alert tone="danger">
+          <AlertTitle>Data belum dapat disimpan</AlertTitle>
+          <AlertDescription>
+            {clientValidationError && !mutation.isError
+              ? 'Periksa bidang yang ditandai merah. Lengkapi atau perbaiki nilainya sesuai petunjuk sebelum menyimpan kembali.'
+              : (mutation.error as ApiError | null)?.message ??
+                'Periksa bidang yang ditandai merah sebelum menyimpan kembali.'}
+          </AlertDescription>
         </Alert>
       ) : null}
       <FormSection
@@ -411,7 +457,16 @@ export function ResourceEditorPage<T extends BaseEntity>({
           }
           isCreate={mode === 'create'}
           apiErrors={apiErrors}
-          onSubmit={(values) => mutation.mutate(values)}
+          onInvalid={() => {
+            setApiErrors(undefined)
+            setClientValidationError(true)
+          }}
+          onSubmit={(values) => {
+            setApiErrors(undefined)
+            setClientValidationError(false)
+            mutation.reset()
+            mutation.mutate(values)
+          }}
         />
       </FormSection>
       <FormActions>

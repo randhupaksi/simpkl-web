@@ -9,7 +9,7 @@ import type {
   AuthUser,
 } from '@/features/auth/types/auth'
 import { mapAuthTokens, mapAuthUser } from '@/features/auth/utils'
-import type { ApiResponse } from '@/shared/types/api'
+import type { ApiError, ApiResponse } from '@/shared/types/api'
 
 interface RetryableRequestConfig extends InternalAxiosRequestConfig {
   _retry?: boolean
@@ -45,6 +45,23 @@ async function refreshTokens(refreshToken: string) {
   }
 
   return refreshRequest
+}
+
+function logApiFailure(
+  normalized: ApiError,
+  request?: RetryableRequestConfig,
+) {
+  if (!import.meta.env.DEV) return
+
+  console.error('[SIMPKL API] Request gagal', {
+    method: request?.method?.toUpperCase(),
+    endpoint: request?.url,
+    status: normalized.status,
+    code: normalized.code,
+    message: normalized.message,
+    fieldErrors: normalized.errors,
+    requestId: normalized.requestId,
+  })
 }
 
 apiClient.interceptors.request.use((config) => {
@@ -98,6 +115,8 @@ apiClient.interceptors.response.use(
       }
     }
 
-    return Promise.reject(normalizeApiError(error))
+    const normalized = normalizeApiError(error)
+    logApiFailure(normalized, request)
+    return Promise.reject(normalized)
   },
 )
