@@ -1,11 +1,11 @@
 import { z } from 'zod'
 
-import { optionalText, requiredText } from '@/shared/schemas'
+import { optionalText, requiredAcademicYear, requiredText } from '@/shared/schemas'
 
 export const periodSchema = z
   .object({
     name: requiredText('Nama periode', 150),
-    academic_year: requiredText('Tahun ajaran', 20),
+    academic_year: requiredAcademicYear('Tahun ajaran'),
     semester: z.enum(['odd', 'even'], {
       message: 'Semester wajib dipilih',
     }),

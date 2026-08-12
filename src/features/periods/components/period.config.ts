@@ -40,6 +40,10 @@ export const periodConfig: ResourceConfig<Period> = {
       label: 'Tahun ajaran',
       required: true,
       placeholder: '2026/2027',
+      inputMode: 'numeric',
+      maxLength: 9,
+      sanitizer: 'academic-year',
+      hint: 'Masukkan tahun awal dan akhir berurutan, misalnya 2026/2027.',
       section: { title: 'A. Identitas periode', description: 'Nama dan tahun ajaran yang akan dikenali pada seluruh proses PKL.' },
     },
     {
