@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { useEffect, useRef } from 'react'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import type { ZodType } from 'zod'
 
 import { ResourceSelectField } from './resource-select-field'
@@ -15,6 +15,7 @@ type ResourceFormProps = {
   defaultValues?: ResourceValues
   isCreate?: boolean
   apiErrors?: Record<string, string[]>
+  onInvalid?: () => void
   onSubmit: (values: ResourceValues) => void
 }
 
@@ -25,12 +26,43 @@ export function ResourceForm({
   defaultValues,
   isCreate,
   apiErrors,
+  onInvalid,
   onSubmit,
 }: ResourceFormProps) {
   const form = useForm<ResourceValues>({
     resolver: zodResolver(schema),
     defaultValues,
   })
+  const formMessage = apiErrors?.form?.[0] ?? apiErrors?.request?.[0]
+  const values = useWatch({ control: form.control })
+  const previousCompanyId = useRef<string | undefined>(undefined)
+  const visibleFields = fields.filter(
+    (field) => !field.hidden && (isCreate || !field.createOnly),
+  )
+  const fieldSections = visibleFields.reduce<Array<{ section?: ResourceField['section']; fields: ResourceField[] }>>(
+    (sections, field) => {
+      const previousSection = sections.at(-1)
+      const isSameSection =
+        previousSection?.section?.title === field.section?.title &&
+        previousSection?.section?.description === field.section?.description
+
+      if (previousSection && isSameSection) {
+        previousSection.fields.push(field)
+      } else {
+        sections.push({ section: field.section, fields: [field] })
+      }
+      return sections
+    },
+    [],
+  )
+
+  useEffect(() => {
+    const companyId = typeof values.company_id === 'string' ? values.company_id : ''
+    if (previousCompanyId.current !== undefined && previousCompanyId.current !== companyId) {
+      form.setValue('company_contact_id', '')
+    }
+    previousCompanyId.current = companyId
+  }, [form, values.company_id])
 
   useEffect(() => {
     Object.entries(apiErrors ?? {}).forEach(([field, messages]) => {
@@ -50,13 +82,48 @@ export function ResourceForm({
   return (
     <form
       id={id}
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="grid gap-5 sm:grid-cols-2"
+      onSubmit={form.handleSubmit(onSubmit, () => {
+        onInvalid?.()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })}
+      onKeyDown={(event) => {
+        if (
+          event.key !== 'Enter' ||
+          event.defaultPrevented ||
+          event.target instanceof HTMLTextAreaElement ||
+          event.target instanceof HTMLButtonElement
+        ) {
+          return
+        }
+
+        event.preventDefault()
+        event.currentTarget.requestSubmit()
+      }}
+      className="space-y-8"
       noValidate
     >
-      {fields
-        .filter((field) => isCreate || !field.createOnly)
-        .map((field) => {
+      {formMessage ? (
+        <p
+          className="text-danger sm:col-span-2 text-sm leading-5"
+          role="alert"
+        >
+          {formMessage}
+        </p>
+      ) : null}
+      {fieldSections.map(({ section, fields: sectionFields }) => (
+        <section key={section?.title ?? sectionFields[0].key} className="space-y-5">
+          {section ? (
+            <div className="border-border border-b pb-4">
+              <p className="text-foreground text-sm font-semibold">{section.title}</p>
+              {section.description ? (
+                <p className="text-muted-foreground mt-1 text-sm leading-5">
+                  {section.description}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
+          <div className="grid gap-5 sm:grid-cols-2">
+            {sectionFields.map((field) => {
           const fieldId = `${id}-${field.key}`
           const error = form.formState.errors[field.key]?.message
           const describedBy = error
@@ -65,47 +132,52 @@ export function ResourceForm({
               ? `${fieldId}-hint`
               : undefined
 
-          return (
-            <div
-              key={field.key}
-              className={
-                field.className ??
-                (field.type === 'textarea' || field.type === 'switch'
-                  ? 'sm:col-span-2'
-                  : undefined)
-              }
-            >
-              <Controller
-                control={form.control}
-                name={field.key}
-                render={({ field: controlled }) => (
-                  <FormField
-                    id={fieldId}
-                    label={field.label}
-                    error={typeof error === 'string' ? error : undefined}
-                    hint={field.hint}
-                    required={field.required}
-                  >
-                    {renderControl(
-                      field,
-                      fieldId,
-                      controlled.value,
-                      controlled.onChange,
-                      describedBy,
-                      Boolean(error),
+              return (
+                <div
+                  key={field.key}
+                  className={
+                    field.className ??
+                    (field.type === 'textarea' || field.type === 'switch'
+                      ? 'sm:col-span-2'
+                      : undefined)
+                  }
+                >
+                  <Controller
+                    control={form.control}
+                    name={field.key}
+                    render={({ field: controlled }) => (
+                      <FormField
+                        id={fieldId}
+                        label={field.label}
+                        error={typeof error === 'string' ? error : undefined}
+                        hint={field.hint}
+                        required={field.required}
+                      >
+                        {renderControl(
+                          field,
+                          values,
+                          fieldId,
+                          controlled.value,
+                          controlled.onChange,
+                          describedBy,
+                          Boolean(error),
+                        )}
+                      </FormField>
                     )}
-                  </FormField>
-                )}
-              />
-            </div>
-          )
-        })}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      ))}
     </form>
   )
 }
 
 function renderControl(
   field: ResourceField,
+  values: ResourceValues,
   id: string,
   value: ResourceValues[string],
   onChange: (value: ResourceValueForControl) => void,
@@ -113,14 +185,29 @@ function renderControl(
   invalid: boolean,
 ) {
   if (field.optionsEndpoint) {
+    const dependentValue = field.dependentOn ? values[field.dependentOn] : undefined
+    const normalizedDependentValue =
+      typeof dependentValue === 'string' ||
+      typeof dependentValue === 'number' ||
+      typeof dependentValue === 'boolean'
+        ? dependentValue
+        : undefined
+
     return (
       <ResourceSelectField
         endpoint={field.optionsEndpoint}
         value={typeof value === 'string' ? value : ''}
         onChange={onChange}
+        dependentValue={normalizedDependentValue}
+        queryParams={field.optionsParams?.(values)}
         labelKey={field.optionLabelKey}
         valueKey={field.optionValueKey}
-        placeholder={field.placeholder ?? getDefaultPlaceholder(field)}
+        placeholder={
+          field.dependentOn && !values[field.dependentOn]
+            ? `Pilih ${field.dependentOn.replace('_id', '').replaceAll('_', ' ')} terlebih dahulu`
+            : field.placeholder ?? getDefaultPlaceholder(field)
+        }
+        disabled={Boolean(field.dependentOn && !values[field.dependentOn])}
         invalid={invalid}
       />
     )

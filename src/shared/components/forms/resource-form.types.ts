@@ -10,6 +10,10 @@ export type ResourceValues = Record<string, ResourceValue>
 export type ResourceField = {
   key: string
   label: string
+  section?: {
+    title: string
+    description?: string
+  }
   type?:
     | 'text'
     | 'email'
@@ -24,8 +28,11 @@ export type ResourceField = {
   required?: boolean
   options?: { value: string; label: string }[]
   optionsEndpoint?: string
+  dependentOn?: string
+  optionsParams?: (values: ResourceValues) => Record<string, string | number | undefined>
   optionLabelKey?: string
   optionValueKey?: string
+  hidden?: boolean
   createOnly?: boolean
   defaultValue?: ResourceValue
   className?: string
