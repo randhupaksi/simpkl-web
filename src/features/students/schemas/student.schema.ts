@@ -17,7 +17,6 @@ export const studentSchema = z.object({
   }),
   class_id: requiredUuid('Kelas'),
   major_id: requiredUuid('Jurusan'),
-  cohort: z.number().int().min(2000).max(2200),
   phone: optionalText(30),
   email: optionalEmail,
   address: optionalText(2000),

@@ -56,7 +56,7 @@ export function StudentImportPage() {
           <div>
             <SectionTitle>File sumber</SectionTitle>
             <Typography variant="muted" className="mt-1">
-              Kolom wajib: nis, name, class_id, major_id, dan cohort. Format
+              Kolom wajib: nis, name, class_id, dan major_id. Format
               yang diterima adalah XLSX atau XLS dengan ukuran maksimal 5 MB.
             </Typography>
           </div>

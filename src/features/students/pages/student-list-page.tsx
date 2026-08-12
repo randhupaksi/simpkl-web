@@ -69,7 +69,7 @@ export function StudentListPage() {
       <PageHeader
         eyebrow="Data Master"
         title="Data Siswa"
-        description="Kelola identitas peserta, kelas, jurusan, angkatan, dan status kesiapan PKL."
+        description="Kelola identitas peserta, kelas, jurusan, dan status kesiapan PKL."
         actions={
           <>
             {hasPermission(permissions, PERMISSIONS.student.import) ? (

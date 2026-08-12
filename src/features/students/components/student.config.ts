@@ -18,7 +18,6 @@ export const studentConfig: ResourceConfig<Student> = {
   tableFields: [
     { key: 'nis', label: 'NIS' },
     { key: 'name', label: 'Nama siswa' },
-    { key: 'cohort', label: 'Angkatan', format: 'number' },
     { key: 'pkl_status', label: 'Status PKL', format: 'status' },
   ],
   fields: [
@@ -51,14 +50,6 @@ export const studentConfig: ResourceConfig<Student> = {
       required: true,
       optionsEndpoint: API_ENDPOINTS.classes,
       placeholder: 'Pilih kelas',
-      section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
-    },
-    {
-      key: 'cohort',
-      label: 'Angkatan',
-      type: 'number',
-      required: true,
-      defaultValue: new Date().getFullYear(),
       section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
     },
     { key: 'phone', label: 'Nomor telepon', type: 'text', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },

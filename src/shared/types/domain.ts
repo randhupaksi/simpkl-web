@@ -11,7 +11,6 @@ export interface Period extends BaseEntity {
   semester: 'odd' | 'even'
   start_date: string
   end_date: string
-  cohort: number
   status: 'draft' | 'preparation' | 'active' | 'completed' | 'archived'
   notes: string
 }

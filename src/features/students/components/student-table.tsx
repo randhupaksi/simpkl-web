@@ -55,7 +55,6 @@ export function createStudentColumns(
       </span>
     ),
   },
-  { accessorKey: 'cohort', header: 'Angkatan' },
   {
     accessorKey: 'pkl_status',
     header: 'Status PKL',
