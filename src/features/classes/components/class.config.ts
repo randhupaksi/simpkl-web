@@ -39,12 +39,16 @@ export const classConfig: ResourceConfig<SchoolClass> = {
       placeholder: 'Pilih jurusan',
       section: { title: 'A. Identitas rombongan belajar', description: 'Nama, tingkat, dan jurusan untuk pengelompokan siswa.' },
     },
-    { key: 'homeroom_teacher', label: 'Wali kelas', section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' } },
+    { key: 'homeroom_teacher', label: 'Wali kelas', maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' } },
     {
       key: 'academic_year',
       label: 'Tahun ajaran',
       required: true,
       placeholder: '2026/2027',
+      inputMode: 'numeric',
+      maxLength: 9,
+      sanitizer: 'academic-year',
+      hint: 'Masukkan tahun awal dan akhir berurutan, misalnya 2026/2027.',
       section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' },
     },
     {
