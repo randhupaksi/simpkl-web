@@ -36,10 +36,10 @@ import { SectionTitle, Typography } from '@/shared/design-system/typography'
 import type { CompanyContact } from '@/shared/types'
 
 const fields: ResourceField[] = [
-  { key: 'name', label: 'Nama PIC', required: true, section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
+  { key: 'name', label: 'Nama PIC', required: true, maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
   { key: 'position', label: 'Jabatan', section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
   { key: 'division', label: 'Divisi', section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
-  { key: 'phone', label: 'Nomor telepon', section: { title: 'B. Kanal komunikasi', description: 'Gunakan kontak yang aktif untuk koordinasi penempatan.' } },
+  { key: 'phone', label: 'Nomor telepon', inputMode: 'tel', maxLength: 14, sanitizer: 'phone', hint: 'Awali dengan 0 atau +62, misalnya 081234567890.', section: { title: 'B. Kanal komunikasi', description: 'Gunakan kontak yang aktif untuk koordinasi penempatan.' } },
   { key: 'email', label: 'Email', type: 'email', section: { title: 'B. Kanal komunikasi', description: 'Gunakan kontak yang aktif untuk koordinasi penempatan.' } },
   {
     key: 'is_primary',
@@ -234,32 +234,34 @@ function ContactDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl">
-        <DialogHeader>
+      <DialogContent className="flex max-w-2xl flex-col gap-0 overflow-hidden p-0">
+        <DialogHeader className="border-border shrink-0 border-b px-6 py-5">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             Simpan jabatan, divisi, dan kanal komunikasi PIC yang dapat
             diverifikasi.
           </DialogDescription>
         </DialogHeader>
-        <ResourceForm
-          id={formId}
-          fields={fields}
-          schema={companyContactSchema}
-          defaultValues={
-            defaultValues ?? {
-              name: '',
-              position: '',
-              division: '',
-              phone: '',
-              email: '',
-              is_primary: false,
-              notes: '',
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+          <ResourceForm
+            id={formId}
+            fields={fields}
+            schema={companyContactSchema}
+            defaultValues={
+              defaultValues ?? {
+                name: '',
+                position: '',
+                division: '',
+                phone: '',
+                email: '',
+                is_primary: false,
+                notes: '',
+              }
             }
-          }
-          onSubmit={onSubmit}
-        />
-        <DialogFooter>
+            onSubmit={onSubmit}
+          />
+        </div>
+        <DialogFooter className="border-border bg-surface shrink-0 border-t px-6 py-4">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Batal
           </Button>
