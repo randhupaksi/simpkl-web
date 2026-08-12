@@ -23,9 +23,9 @@ export const supervisorConfig: ResourceConfig<Supervisor> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'employee_number', label: 'NIP/NIK', section: { title: 'A. Identitas pembimbing', description: 'Data guru yang digunakan untuk pembagian bimbingan PKL.' } },
-    { key: 'name', label: 'Nama lengkap', required: true, section: { title: 'A. Identitas pembimbing', description: 'Data guru yang digunakan untuk pembagian bimbingan PKL.' } },
-    { key: 'phone', label: 'Nomor telepon', section: { title: 'B. Kontak dan keahlian', description: 'Kontak serta cakupan jurusan yang dapat didampingi.' } },
+    { key: 'employee_number', label: 'NIP/NIK', inputMode: 'numeric', maxLength: 18, sanitizer: 'digits', hint: 'Gunakan angka saja, maksimal 18 digit.', section: { title: 'A. Identitas pembimbing', description: 'Data guru yang digunakan untuk pembagian bimbingan PKL.' } },
+    { key: 'name', label: 'Nama lengkap', required: true, maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'A. Identitas pembimbing', description: 'Data guru yang digunakan untuk pembagian bimbingan PKL.' } },
+    { key: 'phone', label: 'Nomor telepon', inputMode: 'tel', maxLength: 14, sanitizer: 'phone', hint: 'Awali dengan 0 atau +62, misalnya 081234567890.', section: { title: 'B. Kontak dan keahlian', description: 'Kontak serta cakupan jurusan yang dapat didampingi.' } },
     { key: 'email', label: 'Email', type: 'email', section: { title: 'B. Kontak dan keahlian', description: 'Kontak serta cakupan jurusan yang dapat didampingi.' } },
     {
       key: 'major_id',

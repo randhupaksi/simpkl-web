@@ -1,11 +1,17 @@
 import { z } from 'zod'
 
-import { optionalEmail, optionalText, requiredText } from '@/shared/schemas'
+import {
+  optionalDigits,
+  optionalEmail,
+  optionalPhone,
+  optionalText,
+  requiredPersonName,
+} from '@/shared/schemas'
 
 export const supervisorSchema = z.object({
-  employee_number: optionalText(50),
-  name: requiredText('Nama pembimbing', 150),
-  phone: optionalText(30),
+  employee_number: optionalDigits('NIP/NIK', 18),
+  name: requiredPersonName('Nama pembimbing', 150),
+  phone: optionalPhone(),
   email: optionalEmail,
   major_id: z.union([z.literal(''), z.uuid()]),
   position: optionalText(100),
