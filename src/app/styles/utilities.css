@@ -20,6 +20,40 @@
   scrollbar-width: thin;
 }
 
+@utility dropdown-scrollbar {
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--brand-700) var(--surface-sunken);
+  scrollbar-width: auto;
+
+  &::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: var(--radius-full);
+    background: var(--surface-sunken);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    min-height: 36px;
+    border: 2px solid var(--surface-sunken);
+    border-radius: var(--radius-full);
+    background: var(--brand-700);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-800);
+  }
+}
+
+@utility dropdown-scroll-area {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 [data-density='compact'] {
   --control-md: 2.25rem;
   --table-cell-padding-y: 0.625rem;
