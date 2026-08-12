@@ -21,6 +21,7 @@ const fields: ResourceField[] = [
     type: 'date',
     required: true,
     hint: 'Menutup penempatan aktif sebelum penempatan pengganti dibuat.',
+    section: { title: 'A. Penutupan penempatan lama', description: 'Data ini mengakhiri penempatan aktif sebelum lokasi baru dibuat.' },
   },
   {
     key: 'reason',
@@ -28,10 +29,18 @@ const fields: ResourceField[] = [
     type: 'textarea',
     required: true,
     hint: 'Alasan tersimpan pada riwayat penempatan dan audit.',
+    section: { title: 'A. Penutupan penempatan lama', description: 'Data ini mengakhiri penempatan aktif sebelum lokasi baru dibuat.' },
+  },
+  {
+    key: 'override_reason',
+    label: 'Alasan pengecualian',
+    type: 'textarea',
+    hint: 'Isi hanya jika ada pengecualian kuota, jurusan, atau kapasitas pembimbing.',
+    section: { title: 'A. Penutupan penempatan lama', description: 'Data ini mengakhiri penempatan aktif sebelum lokasi baru dibuat.' },
   },
   ...placementConfig.fields.filter(
     (field) =>
-      !['previous_placement_id', 'transfer_reason'].includes(field.key),
+      !['status'].includes(field.key),
   ),
 ]
 

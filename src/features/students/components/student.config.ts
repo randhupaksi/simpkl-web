@@ -22,15 +22,16 @@ export const studentConfig: ResourceConfig<Student> = {
     { key: 'pkl_status', label: 'Status PKL', format: 'status' },
   ],
   fields: [
-    { key: 'nis', label: 'NIS', required: true },
-    { key: 'nisn', label: 'NISN' },
-    { key: 'name', label: 'Nama lengkap', required: true },
-    { key: 'nickname', label: 'Nama panggilan' },
+    { key: 'nis', label: 'NIS', required: true, section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'nisn', label: 'NISN', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'name', label: 'Nama lengkap', required: true, section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'nickname', label: 'Nama panggilan', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
     {
       key: 'gender',
       label: 'Jenis kelamin',
       type: 'select',
       required: true,
+      section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' },
       options: [
         { value: 'male', label: 'Laki-laki' },
         { value: 'female', label: 'Perempuan' },
@@ -42,6 +43,7 @@ export const studentConfig: ResourceConfig<Student> = {
       required: true,
       optionsEndpoint: API_ENDPOINTS.majors,
       placeholder: 'Pilih jurusan',
+      section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
     },
     {
       key: 'class_id',
@@ -49,6 +51,7 @@ export const studentConfig: ResourceConfig<Student> = {
       required: true,
       optionsEndpoint: API_ENDPOINTS.classes,
       placeholder: 'Pilih kelas',
+      section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
     },
     {
       key: 'cohort',
@@ -56,17 +59,19 @@ export const studentConfig: ResourceConfig<Student> = {
       type: 'number',
       required: true,
       defaultValue: new Date().getFullYear(),
+      section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
     },
-    { key: 'phone', label: 'Nomor telepon', type: 'text' },
-    { key: 'email', label: 'Email', type: 'email' },
-    { key: 'parent_name', label: 'Nama orang tua/wali' },
-    { key: 'parent_phone', label: 'Telepon orang tua/wali' },
+    { key: 'phone', label: 'Nomor telepon', type: 'text', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'email', label: 'Email', type: 'email', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'parent_name', label: 'Nama orang tua/wali', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'parent_phone', label: 'Telepon orang tua/wali', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
     {
       key: 'status',
       label: 'Status siswa',
       type: 'select',
       required: true,
       defaultValue: 'active',
+      section: { title: 'D. Status administrasi', description: 'Status ini dipakai untuk menjaga data siswa dan progres PKL tetap akurat.' },
       options: [
         { value: 'active', label: 'Aktif' },
         { value: 'inactive', label: 'Tidak aktif' },
@@ -81,6 +86,7 @@ export const studentConfig: ResourceConfig<Student> = {
       type: 'select',
       required: true,
       defaultValue: 'unplaced',
+      section: { title: 'D. Status administrasi', description: 'Status ini dipakai untuk menjaga data siswa dan progres PKL tetap akurat.' },
       options: [
         { value: 'unplaced', label: 'Belum ditempatkan' },
         { value: 'placement_process', label: 'Proses penempatan' },
@@ -96,12 +102,14 @@ export const studentConfig: ResourceConfig<Student> = {
       label: 'Alamat',
       type: 'textarea',
       className: 'sm:col-span-2',
+      section: { title: 'E. Alamat dan catatan', description: 'Informasi pendukung untuk koordinasi internal sekolah.' },
     },
     {
       key: 'notes',
       label: 'Catatan internal',
       type: 'textarea',
       className: 'sm:col-span-2',
+      section: { title: 'E. Alamat dan catatan', description: 'Informasi pendukung untuk koordinasi internal sekolah.' },
     },
   ],
 }

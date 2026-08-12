@@ -37,12 +37,14 @@ const fields: ResourceField[] = [
     required: true,
     optionsEndpoint: API_ENDPOINTS.periods,
     placeholder: 'Pilih periode selesai',
+    section: { title: 'A. Periode yang diarsipkan', description: 'Pilih periode yang administrasinya telah selesai dan siap ditutup.' },
   },
   {
     key: 'reason',
     label: 'Catatan arsip',
     type: 'textarea',
     placeholder: 'Alasan atau catatan penutupan periode',
+    section: { title: 'B. Catatan penutupan', description: 'Tambahkan konteks penting yang perlu terbaca pada snapshot arsip.' },
   },
 ]
 

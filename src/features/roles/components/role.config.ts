@@ -29,13 +29,14 @@ export const roleConfig: ResourceConfig<Role> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'code', label: 'Kode role', required: true },
-    { key: 'name', label: 'Nama role', required: true },
+    { key: 'code', label: 'Kode role', required: true, section: { title: 'A. Identitas role', description: 'Kode dan nama kelompok akses yang akan dipilih pada akun staf.' } },
+    { key: 'name', label: 'Nama role', required: true, section: { title: 'A. Identitas role', description: 'Kode dan nama kelompok akses yang akan dipilih pada akun staf.' } },
     {
       key: 'is_system',
       label: 'Role sistem',
       type: 'switch',
       hint: 'Gunakan hanya untuk role bawaan yang dilindungi.',
+      section: { title: 'B. Perlindungan dan status', description: 'Tandai role bawaan dengan hati-hati agar tidak mengganggu akses sistem.' },
     },
     {
       key: 'status',
@@ -43,11 +44,12 @@ export const roleConfig: ResourceConfig<Role> = {
       type: 'select',
       required: true,
       defaultValue: 'active',
+      section: { title: 'B. Perlindungan dan status', description: 'Tandai role bawaan dengan hati-hati agar tidak mengganggu akses sistem.' },
       options: [
         { value: 'active', label: 'Aktif' },
         { value: 'inactive', label: 'Tidak aktif' },
       ],
     },
-    { key: 'description', label: 'Deskripsi', type: 'textarea' },
+    { key: 'description', label: 'Deskripsi', type: 'textarea', section: { title: 'C. Keterangan role', description: 'Jelaskan tanggung jawab pengguna yang menggunakan role ini.' } },
   ],
 }

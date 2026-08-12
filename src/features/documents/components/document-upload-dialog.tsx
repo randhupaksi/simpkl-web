@@ -87,6 +87,10 @@ export function DocumentUploadDialog() {
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-5" onSubmit={onSubmit}>
+          <FormSubsection
+            title="A. Berkas dan klasifikasi"
+            description="Pilih file privat beserta tipe dokumen yang sesuai."
+          />
           <Controller
             control={control}
             name="file"
@@ -111,6 +115,10 @@ export function DocumentUploadDialog() {
                 />
               </FormField>
             )}
+          />
+          <FormSubsection
+            title="B. Keterkaitan dokumen"
+            description="Hubungkan dokumen ke pemilik, periode, atau penempatan bila relevan."
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <Controller
@@ -222,6 +230,12 @@ export function DocumentUploadDialog() {
                 {...register('number')}
               />
             </FormField>
+            <div className="border-border sm:col-span-2 mt-2 border-b pb-3">
+              <p className="text-foreground text-sm font-semibold">C. Masa berlaku</p>
+              <p className="text-muted-foreground mt-1 text-sm">
+                Isi tanggal yang tersedia pada dokumen untuk memudahkan pemantauan.
+              </p>
+            </div>
             {([
               ['issued_at', 'Tanggal terbit', 'Pilih tanggal terbit'],
               ['valid_from', 'Berlaku mulai', 'Pilih tanggal mulai berlaku'],
@@ -245,6 +259,10 @@ export function DocumentUploadDialog() {
               />
             ))}
           </div>
+          <FormSubsection
+            title="D. Catatan internal"
+            description="Tambahkan konteks singkat yang hanya diperlukan oleh pengelola sekolah."
+          />
           <FormField id="notes" label="Catatan" error={errors.notes?.message}>
             <Textarea
               id="notes"
@@ -271,5 +289,14 @@ export function DocumentUploadDialog() {
         </form>
       </DialogContent>
     </Dialog>
+  )
+}
+
+function FormSubsection({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="border-border border-b pb-4">
+      <p className="text-foreground text-sm font-semibold">{title}</p>
+      <p className="text-muted-foreground mt-1 text-sm leading-5">{description}</p>
+    </div>
   )
 }

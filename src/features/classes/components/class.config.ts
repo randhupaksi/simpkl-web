@@ -22,13 +22,14 @@ export const classConfig: ResourceConfig<SchoolClass> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'name', label: 'Nama kelas', required: true },
+    { key: 'name', label: 'Nama kelas', required: true, section: { title: 'A. Identitas rombongan belajar', description: 'Nama, tingkat, dan jurusan untuk pengelompokan siswa.' } },
     {
       key: 'level',
       label: 'Tingkat',
       type: 'number',
       required: true,
       defaultValue: 11,
+      section: { title: 'A. Identitas rombongan belajar', description: 'Nama, tingkat, dan jurusan untuk pengelompokan siswa.' },
     },
     {
       key: 'major_id',
@@ -36,13 +37,15 @@ export const classConfig: ResourceConfig<SchoolClass> = {
       required: true,
       optionsEndpoint: API_ENDPOINTS.majors,
       placeholder: 'Pilih jurusan',
+      section: { title: 'A. Identitas rombongan belajar', description: 'Nama, tingkat, dan jurusan untuk pengelompokan siswa.' },
     },
-    { key: 'homeroom_teacher', label: 'Wali kelas' },
+    { key: 'homeroom_teacher', label: 'Wali kelas', section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' } },
     {
       key: 'academic_year',
       label: 'Tahun ajaran',
       required: true,
       placeholder: '2026/2027',
+      section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' },
     },
     {
       key: 'status',
@@ -50,6 +53,7 @@ export const classConfig: ResourceConfig<SchoolClass> = {
       type: 'select',
       required: true,
       defaultValue: 'active',
+      section: { title: 'B. Pengelolaan kelas', description: 'Tahun ajaran, wali kelas, dan status penggunaan kelas.' },
       options: [
         { value: 'active', label: 'Aktif' },
         { value: 'inactive', label: 'Tidak aktif' },

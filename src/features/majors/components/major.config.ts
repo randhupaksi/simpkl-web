@@ -22,21 +22,22 @@ export const majorConfig: ResourceConfig<Major> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'code', label: 'Kode jurusan', required: true },
-    { key: 'abbreviation', label: 'Singkatan', required: true },
-    { key: 'name', label: 'Nama jurusan', required: true },
-    { key: 'head_name', label: 'Kepala jurusan' },
+    { key: 'code', label: 'Kode jurusan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
+    { key: 'abbreviation', label: 'Singkatan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
+    { key: 'name', label: 'Nama jurusan', required: true, section: { title: 'A. Identitas kompetensi keahlian', description: 'Kode dan nama referensi yang digunakan oleh kelas, siswa, serta penempatan.' } },
+    { key: 'head_name', label: 'Kepala jurusan', section: { title: 'B. Pengelolaan jurusan', description: 'Penanggung jawab dan status referensi jurusan.' } },
     {
       key: 'status',
       label: 'Status',
       type: 'select',
       required: true,
       defaultValue: 'active',
+      section: { title: 'B. Pengelolaan jurusan', description: 'Penanggung jawab dan status referensi jurusan.' },
       options: [
         { value: 'active', label: 'Aktif' },
         { value: 'inactive', label: 'Tidak aktif' },
       ],
     },
-    { key: 'description', label: 'Deskripsi', type: 'textarea' },
+    { key: 'description', label: 'Deskripsi', type: 'textarea', section: { title: 'C. Keterangan kompetensi', description: 'Ringkasan bidang keahlian untuk referensi internal.' } },
   ],
 }

@@ -36,18 +36,19 @@ import { SectionTitle, Typography } from '@/shared/design-system/typography'
 import type { CompanyContact } from '@/shared/types'
 
 const fields: ResourceField[] = [
-  { key: 'name', label: 'Nama PIC', required: true },
-  { key: 'position', label: 'Jabatan' },
-  { key: 'division', label: 'Divisi' },
-  { key: 'phone', label: 'Nomor telepon' },
-  { key: 'email', label: 'Email', type: 'email' },
+  { key: 'name', label: 'Nama PIC', required: true, section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
+  { key: 'position', label: 'Jabatan', section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
+  { key: 'division', label: 'Divisi', section: { title: 'A. Identitas PIC', description: 'Nama dan peran kontak yang mewakili perusahaan.' } },
+  { key: 'phone', label: 'Nomor telepon', section: { title: 'B. Kanal komunikasi', description: 'Gunakan kontak yang aktif untuk koordinasi penempatan.' } },
+  { key: 'email', label: 'Email', type: 'email', section: { title: 'B. Kanal komunikasi', description: 'Gunakan kontak yang aktif untuk koordinasi penempatan.' } },
   {
     key: 'is_primary',
     label: 'Kontak utama',
     type: 'switch',
     hint: 'Satu perusahaan hanya memiliki satu kontak utama.',
+    section: { title: 'C. Prioritas dan catatan', description: 'Tentukan kontak utama serta informasi internal yang perlu diketahui.' },
   },
-  { key: 'notes', label: 'Catatan', type: 'textarea' },
+  { key: 'notes', label: 'Catatan', type: 'textarea', section: { title: 'C. Prioritas dan catatan', description: 'Tentukan kontak utama serta informasi internal yang perlu diketahui.' } },
 ]
 
 export function CompanyContactsPanel({ companyId }: { companyId: string }) {

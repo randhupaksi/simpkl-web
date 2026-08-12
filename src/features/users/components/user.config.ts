@@ -39,9 +39,9 @@ export const userConfig: ResourceConfig<UserAccount> = {
     { key: 'status', label: 'Status', format: 'status' },
   ],
   fields: [
-    { key: 'name', label: 'Nama lengkap', required: true },
-    { key: 'username', label: 'Username', required: true },
-    { key: 'email', label: 'Email', type: 'email', required: true },
+    { key: 'name', label: 'Nama lengkap', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
+    { key: 'username', label: 'Username', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
+    { key: 'email', label: 'Email', type: 'email', required: true, section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' } },
     {
       key: 'password',
       label: 'Password awal',
@@ -49,18 +49,21 @@ export const userConfig: ResourceConfig<UserAccount> = {
       createOnly: true,
       required: true,
       hint: 'Minimal 8 karakter. Password tidak pernah ditampilkan kembali.',
+      section: { title: 'A. Identitas akun', description: 'Identitas staf dan alamat masuk yang digunakan untuk mengakses SIMPKL.' },
     },
     {
       key: 'major_id',
       label: 'Ruang lingkup jurusan',
       optionsEndpoint: API_ENDPOINTS.majors,
       placeholder: 'Semua jurusan',
+      section: { title: 'B. Ruang lingkup akses', description: 'Batasi data yang dapat diakses bila akun hanya bertugas pada jurusan atau kelas tertentu.' },
     },
     {
       key: 'class_id',
       label: 'Ruang lingkup kelas',
       optionsEndpoint: API_ENDPOINTS.classes,
       placeholder: 'Semua kelas',
+      section: { title: 'B. Ruang lingkup akses', description: 'Batasi data yang dapat diakses bila akun hanya bertugas pada jurusan atau kelas tertentu.' },
     },
     {
       key: 'status',
@@ -68,6 +71,7 @@ export const userConfig: ResourceConfig<UserAccount> = {
       type: 'select',
       required: true,
       defaultValue: 'active',
+      section: { title: 'C. Status akun', description: 'Akun nonaktif atau terkunci tidak dapat digunakan untuk masuk.' },
       options: [
         { value: 'active', label: 'Aktif' },
         { value: 'inactive', label: 'Tidak aktif' },

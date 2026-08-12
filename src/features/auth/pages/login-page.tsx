@@ -76,6 +76,12 @@ export function LoginPage() {
       </Typography>
 
       <form className="mt-8 space-y-5" onSubmit={onSubmit} noValidate>
+        <div className="border-border border-b pb-4">
+          <p className="text-foreground text-sm font-semibold">Kredensial akun</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Gunakan akun staf yang terdaftar di SIMPKL.
+          </p>
+        </div>
         <FormField
           id="login"
           label="Email atau username"

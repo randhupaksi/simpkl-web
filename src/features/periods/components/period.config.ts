@@ -33,12 +33,14 @@ export const periodConfig: ResourceConfig<Period> = {
       label: 'Nama periode',
       required: true,
       placeholder: 'PKL Tahun Ajaran 2026/2027',
+      section: { title: 'A. Identitas periode', description: 'Nama dan tahun ajaran yang akan dikenali pada seluruh proses PKL.' },
     },
     {
       key: 'academic_year',
       label: 'Tahun ajaran',
       required: true,
       placeholder: '2026/2027',
+      section: { title: 'A. Identitas periode', description: 'Nama dan tahun ajaran yang akan dikenali pada seluruh proses PKL.' },
     },
     {
       key: 'semester',
@@ -46,6 +48,7 @@ export const periodConfig: ResourceConfig<Period> = {
       type: 'select',
       required: true,
       defaultValue: 'odd',
+      section: { title: 'A. Identitas periode', description: 'Nama dan tahun ajaran yang akan dikenali pada seluruh proses PKL.' },
       options: [
         { value: 'odd', label: 'Ganjil' },
         { value: 'even', label: 'Genap' },
@@ -57,18 +60,21 @@ export const periodConfig: ResourceConfig<Period> = {
       type: 'number',
       required: true,
       defaultValue: new Date().getFullYear(),
+      section: { title: 'A. Identitas periode', description: 'Nama dan tahun ajaran yang akan dikenali pada seluruh proses PKL.' },
     },
     {
       key: 'start_date',
       label: 'Tanggal mulai',
       type: 'date',
       required: true,
+      section: { title: 'B. Rentang pelaksanaan', description: 'Tanggal ini menjadi acuan validasi penempatan dan dokumen.' },
     },
     {
       key: 'end_date',
       label: 'Tanggal selesai',
       type: 'date',
       required: true,
+      section: { title: 'B. Rentang pelaksanaan', description: 'Tanggal ini menjadi acuan validasi penempatan dan dokumen.' },
     },
     {
       key: 'status',
@@ -76,6 +82,7 @@ export const periodConfig: ResourceConfig<Period> = {
       type: 'select',
       required: true,
       defaultValue: 'draft',
+      section: { title: 'C. Status dan catatan', description: 'Atur kesiapan periode serta informasi internal yang menyertainya.' },
       options: [
         { value: 'draft', label: 'Draft' },
         { value: 'preparation', label: 'Persiapan' },
@@ -89,6 +96,7 @@ export const periodConfig: ResourceConfig<Period> = {
       label: 'Catatan',
       type: 'textarea',
       placeholder: 'Catatan internal periode (opsional)',
+      section: { title: 'C. Status dan catatan', description: 'Atur kesiapan periode serta informasi internal yang menyertainya.' },
     },
   ],
 }

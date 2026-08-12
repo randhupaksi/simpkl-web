@@ -21,9 +21,9 @@ export const permissionConfig: ResourceConfig<Permission> = {
     { key: 'description', label: 'Deskripsi' },
   ],
   fields: [
-    { key: 'code', label: 'Kode permission', required: true },
-    { key: 'name', label: 'Nama permission', required: true },
-    { key: 'module', label: 'Modul', required: true },
-    { key: 'description', label: 'Deskripsi', type: 'textarea' },
+    { key: 'code', label: 'Kode permission', required: true, section: { title: 'A. Identitas izin', description: 'Kode dan nama izin granular yang diperiksa oleh backend.' } },
+    { key: 'name', label: 'Nama permission', required: true, section: { title: 'A. Identitas izin', description: 'Kode dan nama izin granular yang diperiksa oleh backend.' } },
+    { key: 'module', label: 'Modul', required: true, section: { title: 'B. Cakupan modul', description: 'Tentukan modul aplikasi yang dilindungi oleh izin ini.' } },
+    { key: 'description', label: 'Deskripsi', type: 'textarea', section: { title: 'C. Penjelasan akses', description: 'Jelaskan tindakan yang diizinkan agar konfigurasi mudah diaudit.' } },
   ],
 }

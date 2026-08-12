@@ -46,6 +46,7 @@ const actionFields: ResourceField[] = [
     required: true,
     optionsEndpoint: API_ENDPOINTS.students,
     placeholder: 'Pilih siswa',
+    section: { title: 'A. Sasaran evaluasi', description: 'Pilih siswa dan periode yang kesiapan administrasinya akan diperiksa.' },
   },
   {
     key: 'period_id',
@@ -53,12 +54,14 @@ const actionFields: ResourceField[] = [
     required: true,
     optionsEndpoint: API_ENDPOINTS.periods,
     placeholder: 'Pilih periode',
+    section: { title: 'A. Sasaran evaluasi', description: 'Pilih siswa dan periode yang kesiapan administrasinya akan diperiksa.' },
   },
   {
     key: 'reason',
     label: 'Alasan pengecualian',
     type: 'textarea',
     hint: 'Wajib untuk override dan akan tersimpan dalam audit administrasi.',
+    section: { title: 'B. Dasar pengecualian', description: 'Jelaskan alasan yang dapat dipertanggungjawabkan sebelum melewati hasil otomatis.' },
   },
 ]
 
