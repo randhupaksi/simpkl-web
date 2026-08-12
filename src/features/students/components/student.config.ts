@@ -21,10 +21,10 @@ export const studentConfig: ResourceConfig<Student> = {
     { key: 'pkl_status', label: 'Status PKL', format: 'status' },
   ],
   fields: [
-    { key: 'nis', label: 'NIS', required: true, section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
-    { key: 'nisn', label: 'NISN', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
-    { key: 'name', label: 'Nama lengkap', required: true, section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
-    { key: 'nickname', label: 'Nama panggilan', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'nis', label: 'NIS', required: true, inputMode: 'numeric', maxLength: 30, sanitizer: 'digits', hint: 'Gunakan angka saja.', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'nisn', label: 'NISN', inputMode: 'numeric', maxLength: 10, sanitizer: 'digits', hint: 'Masukkan tepat 10 angka NISN.', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'name', label: 'Nama lengkap', required: true, maxLength: 150, sanitizer: 'person-name', hint: 'Gunakan huruf dan tanda baca nama yang wajar; angka tidak dapat dimasukkan.', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
+    { key: 'nickname', label: 'Nama panggilan', maxLength: 80, sanitizer: 'person-name', section: { title: 'A. Identitas siswa', description: 'Nomor induk dan nama yang digunakan pada administrasi PKL.' } },
     {
       key: 'gender',
       label: 'Jenis kelamin',
@@ -52,10 +52,10 @@ export const studentConfig: ResourceConfig<Student> = {
       placeholder: 'Pilih kelas',
       section: { title: 'B. Data akademik', description: 'Kelas dan jurusan menentukan konteks penempatan siswa.' },
     },
-    { key: 'phone', label: 'Nomor telepon', type: 'text', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'phone', label: 'Nomor telepon', type: 'text', inputMode: 'tel', maxLength: 14, sanitizer: 'phone', hint: 'Awali dengan 0 atau +62, misalnya 081234567890.', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
     { key: 'email', label: 'Email', type: 'email', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
-    { key: 'parent_name', label: 'Nama orang tua/wali', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
-    { key: 'parent_phone', label: 'Telepon orang tua/wali', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'parent_name', label: 'Nama orang tua/wali', maxLength: 150, sanitizer: 'person-name', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
+    { key: 'parent_phone', label: 'Telepon orang tua/wali', inputMode: 'tel', maxLength: 14, sanitizer: 'phone', hint: 'Awali dengan 0 atau +62, misalnya 081234567890.', section: { title: 'C. Kontak dan wali', description: 'Gunakan kontak yang dapat dihubungi selama proses PKL.' } },
     {
       key: 'status',
       label: 'Status siswa',
