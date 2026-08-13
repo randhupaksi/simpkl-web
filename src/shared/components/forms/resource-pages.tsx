@@ -1,6 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ColumnDef } from '@tanstack/react-table'
-import { Eye, Pencil, Plus, Save, Trash2 } from 'lucide-react'
+import {
+  BadgeCheck,
+  BookOpenCheck,
+  BriefcaseBusiness,
+  Building2,
+  CalendarDays,
+  CalendarRange,
+  Clock,
+  Eye,
+  FileText,
+  GraduationCap,
+  Hash,
+  MapPin,
+  NotebookText,
+  Phone,
+  Pencil,
+  Plus,
+  Save,
+  Trash2,
+  UserRound,
+  UsersRound,
+  type LucideIcon,
+} from 'lucide-react'
 import { useMemo, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
@@ -527,6 +549,11 @@ export function ResourceDetailPage<T extends BaseEntity>({
       />
     )
 
+  const detailFields = config.fields.filter((field) => field.type !== 'password')
+  const detailSections = groupDetailFields(detailFields)
+  const statusField = detailFields.find(
+    (field) => field.key === 'status' || field.key === 'pkl_status',
+  )
   return (
     <div className="enter-animation space-y-6">
       <PageHeader
@@ -546,36 +573,233 @@ export function ResourceDetailPage<T extends BaseEntity>({
           ) : null
         }
       />
-      <Card>
-        <CardContent>
-          <DescriptionList
-            columns={3}
-            items={config.fields
-              .filter((field) => field.type !== 'password')
-              .map((field) => ({
-                label: field.label,
-                value: (
+      <Card className="overflow-hidden border-t-2 border-t-primary">
+        <CardContent className="grid gap-6 py-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="flex min-w-0 items-start gap-4">
+            <span className="bg-primary-subtle text-primary grid size-12 shrink-0 place-items-center rounded-[var(--radius-md)]">
+              <DetailResourceIcon queryKey={config.queryKey} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-muted-foreground text-[0.6875rem] font-bold tracking-[0.14em] uppercase">
+                Ringkasan {config.name}
+              </p>
+              <p className="text-foreground mt-1 truncate text-lg font-bold tracking-[-0.025em]">
+                {config.getDisplayName(query.data)}
+              </p>
+              <p className="text-muted-foreground mt-1 text-sm leading-6">
+                Informasi utama dan status administratif terkini.
+              </p>
+            </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-3">
+            {statusField ? (
+              <DetailMeta
+                icon={BadgeCheck}
+                label={statusField.label}
+                value={
                   <ResourceFieldValue
-                    field={field}
-                    value={query.data[field.key as keyof T]}
-                    format={
-                      field.type === 'date'
-                        ? 'date'
-                        : field.type === 'switch'
-                          ? 'boolean'
-                          : field.key === 'status' || field.key === 'pkl_status'
-                            ? 'status'
-                            : undefined
-                    }
+                    field={statusField}
+                    value={query.data[statusField.key as keyof T]}
+                    format="status"
                   />
-                ),
-              }))}
-          />
+                }
+              />
+            ) : null}
+            <DetailMeta
+              icon={Hash}
+              label="ID data"
+              value={<span className="font-mono text-xs">{query.data.id.slice(0, 8).toUpperCase()}</span>}
+            />
+            <DetailMeta
+              icon={Clock}
+              label="Diperbarui"
+              value={formatDetailTimestamp(query.data.updated_at)}
+            />
+          </div>
         </CardContent>
       </Card>
+      <div className="grid items-start gap-6 2xl:grid-cols-2">
+        {detailSections.map((section, index) => (
+          <DetailSectionCard
+            key={section.title}
+            section={section}
+            item={query.data}
+            index={index}
+          />
+        ))}
+      </div>
       {renderAfter?.(query.data)}
     </div>
   )
+}
+
+type DetailSection = {
+  title: string
+  description?: string
+  fields: ResourceConfig<BaseEntity>['fields']
+}
+
+function groupDetailFields(
+  fields: ResourceConfig<BaseEntity>['fields'],
+): DetailSection[] {
+  const sections = new Map<string, DetailSection>()
+
+  fields.forEach((field) => {
+    const title = field.section?.title ?? 'Informasi tambahan'
+    const current = sections.get(title) ?? {
+      title,
+      description: field.section?.description,
+      fields: [],
+    }
+    current.fields.push(field)
+    sections.set(title, current)
+  })
+
+  return [...sections.values()]
+}
+
+function DetailSectionCard<T extends BaseEntity>({
+  section,
+  item,
+  index,
+}: {
+  section: DetailSection
+  item: T
+  index: number
+}) {
+  const tone = detailSectionTones[index % detailSectionTones.length]
+
+  return (
+    <Card className={`overflow-hidden border-t-2 ${tone.border}`}>
+      <div className="border-border flex items-start gap-3 border-b px-5 py-4 sm:px-6">
+        <span className={`grid size-10 shrink-0 place-items-center rounded-[var(--radius-md)] ${tone.icon}`}>
+          <DetailSectionIcon title={section.title} />
+        </span>
+        <div className="min-w-0">
+          <p className="text-foreground text-sm font-bold">{section.title}</p>
+          {section.description ? (
+            <p className="text-muted-foreground mt-1 text-xs leading-5">
+              {section.description}
+            </p>
+          ) : null}
+        </div>
+      </div>
+      <CardContent className="py-5 sm:px-6">
+        <dl className="grid gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-2">
+          {section.fields.map((field) => (
+            <div
+              key={field.key}
+              className={`flex min-w-0 gap-3 ${field.type === 'textarea' ? 'sm:col-span-2 xl:col-span-3 2xl:col-span-2' : ''}`}
+            >
+              <span className="bg-surface-subtle text-primary grid size-9 shrink-0 place-items-center rounded-[var(--radius-sm)]">
+                <DetailFieldIcon fieldKey={field.key} />
+              </span>
+              <div className="min-w-0 pt-0.5">
+                <dt className="text-muted-foreground text-[0.6875rem] font-bold tracking-[0.12em] uppercase">
+                  {field.label}
+                </dt>
+                <dd className="text-foreground mt-1 break-words text-sm leading-6 font-semibold">
+                  <ResourceFieldValue
+                    field={field}
+                    value={item[field.key as keyof T]}
+                    format={getDetailFieldFormat(field)}
+                  />
+                </dd>
+              </div>
+            </div>
+          ))}
+        </dl>
+      </CardContent>
+    </Card>
+  )
+}
+
+function DetailMeta({
+  icon: Icon,
+  label,
+  value,
+}: {
+  icon: LucideIcon
+  label: string
+  value: ReactNode
+}) {
+  return (
+    <div className="border-border bg-surface-subtle min-w-0 rounded-[var(--radius-md)] border px-3 py-2.5">
+      <div className="text-muted-foreground flex items-center gap-1.5 text-[0.625rem] font-bold tracking-[0.1em] uppercase">
+        <Icon className="size-3.5" />
+        {label}
+      </div>
+      <div className="text-foreground mt-1 min-h-5 truncate text-sm font-semibold">{value}</div>
+    </div>
+  )
+}
+
+const detailSectionTones = [
+  { border: 'border-t-primary', icon: 'bg-primary-subtle text-primary' },
+  { border: 'border-t-info', icon: 'bg-info-subtle text-info' },
+  { border: 'border-t-success', icon: 'bg-success-subtle text-success' },
+  { border: 'border-t-warning', icon: 'bg-warning-subtle text-warning' },
+] as const
+
+function DetailResourceIcon({ queryKey }: { queryKey: string }) {
+  if (queryKey === 'students') return <GraduationCap className="size-6" />
+  if (queryKey === 'companies') return <Building2 className="size-6" />
+  if (queryKey === 'periods') return <CalendarRange className="size-6" />
+  if (queryKey === 'placements') return <BriefcaseBusiness className="size-6" />
+  return <FileText className="size-6" />
+}
+
+function DetailSectionIcon({ title }: { title: string }) {
+  const normalizedTitle = title.toLocaleLowerCase('id')
+  if (normalizedTitle.includes('identitas') || normalizedTitle.includes('peserta')) return <UserRound className="size-5" />
+  if (normalizedTitle.includes('akademik')) return <GraduationCap className="size-5" />
+  if (normalizedTitle.includes('kontak')) return <Phone className="size-5" />
+  if (normalizedTitle.includes('kapasitas')) return <UsersRound className="size-5" />
+  if (normalizedTitle.includes('profil')) return <Building2 className="size-5" />
+  if (normalizedTitle.includes('tanggal') || normalizedTitle.includes('rentang') || normalizedTitle.includes('masa berlaku') || normalizedTitle.includes('jadwal')) return <CalendarDays className="size-5" />
+  if (normalizedTitle.includes('lokasi') || normalizedTitle.includes('alamat')) return <MapPin className="size-5" />
+  if (normalizedTitle.includes('peran') || normalizedTitle.includes('kerja')) return <BriefcaseBusiness className="size-5" />
+  if (normalizedTitle.includes('status')) return <BadgeCheck className="size-5" />
+  if (normalizedTitle.includes('catatan') || normalizedTitle.includes('keterangan')) return <NotebookText className="size-5" />
+  return <BookOpenCheck className="size-5" />
+}
+
+function DetailFieldIcon({ fieldKey }: { fieldKey: string }) {
+  const normalizedKey = fieldKey.toLocaleLowerCase('id')
+  const Icon = normalizedKey.includes('phone') ? Phone
+    : normalizedKey.includes('date') ? CalendarDays
+      : normalizedKey.includes('address') || normalizedKey.includes('city') || normalizedKey.includes('province') || normalizedKey.includes('district') || normalizedKey.includes('maps') ? MapPin
+        : normalizedKey.includes('status') ? BadgeCheck
+          : normalizedKey.includes('notes') || normalizedKey.includes('description') ? NotebookText
+            : normalizedKey.includes('company') ? Building2
+              : normalizedKey.includes('student') || normalizedKey.includes('supervisor') || normalizedKey.includes('parent') || normalizedKey.includes('name') ? UserRound
+                : normalizedKey.includes('major') || normalizedKey.includes('class') ? GraduationCap
+                  : normalizedKey.includes('period') || normalizedKey.includes('semester') || normalizedKey.includes('cohort') ? CalendarRange
+                    : normalizedKey.includes('position') || normalizedKey.includes('division') || normalizedKey.includes('work') ? BriefcaseBusiness
+                      : FileText
+
+  return <Icon className="size-4" />
+}
+
+function getDetailFieldFormat(
+  field: ResourceConfig<BaseEntity>['fields'][number],
+) {
+  if (field.type === 'date') return 'date' as const
+  if (field.type === 'switch') return 'boolean' as const
+  if (field.key === 'status' || field.key === 'pkl_status') return 'status' as const
+  if (field.type === 'number') return 'number' as const
+  return undefined
+}
+
+function formatDetailTimestamp(value?: string) {
+  if (!value) return 'Belum tersedia'
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(value))
 }
 
 type ResourceFormDialogProps<T extends BaseEntity> = {
@@ -755,8 +979,8 @@ function formatField(
   if (format === 'number' && typeof value === 'number') {
     return new Intl.NumberFormat('id-ID').format(value)
   }
-  if (value === null || value === undefined || value === '') return '—'
-  if (Array.isArray(value)) return value.join(', ') || '—'
+  if (value === null || value === undefined || value === '') return '-'
+  if (Array.isArray(value)) return value.join(', ') || '-'
   return String(value)
 }
 
@@ -792,7 +1016,7 @@ function ResourceFieldValue({
     }
 
     if (optionsQuery.isPending) return <>Memuat…</>
-    return <>—</>
+    return <>-</>
   }
 
   return formatField(value, format)
