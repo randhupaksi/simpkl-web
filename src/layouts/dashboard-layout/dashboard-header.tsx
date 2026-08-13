@@ -27,12 +27,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/components/ui'
+import { cn } from '@/shared/lib/utils'
 
 type DashboardHeaderProps = {
+  collapsed: boolean
   onOpenNavigation: () => void
 }
 
-export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
+export function DashboardHeader({
+  collapsed,
+  onOpenNavigation,
+}: DashboardHeaderProps) {
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
   const logoutMutation = useLogoutMutation()
@@ -50,7 +55,12 @@ export function DashboardHeader({ onOpenNavigation }: DashboardHeaderProps) {
   }
 
   return (
-    <header className="border-border bg-surface/95 sticky top-0 z-[var(--z-sticky)] flex min-w-0 h-[5.25rem] items-center gap-4 overflow-hidden border-b px-4 backdrop-blur sm:px-7">
+    <header
+      className={cn(
+        'border-border bg-surface/95 fixed top-0 right-0 left-0 z-[var(--z-sticky)] flex h-[var(--header-height)] min-w-0 items-center gap-4 overflow-hidden border-b px-4 shadow-[var(--shadow-xs)] backdrop-blur transition-[left] duration-[var(--duration-normal)] ease-[var(--ease-standard)] sm:px-7',
+        collapsed ? 'lg:left-20' : 'lg:left-[var(--sidebar-width)]',
+      )}
+    >
       <IconButton
         aria-label="Buka navigasi"
         variant="outline"
