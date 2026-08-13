@@ -8,13 +8,18 @@ import { cn } from '@/shared/lib/utils'
 
 const DashboardContent = memo(function DashboardContent({
   onOpenNavigation,
+  collapsed,
 }: {
   onOpenNavigation: () => void
+  collapsed: boolean
 }) {
   return (
     <>
-      <DashboardHeader onOpenNavigation={onOpenNavigation} />
-      <main className="p-4 sm:p-6 xl:p-8">
+      <DashboardHeader
+        collapsed={collapsed}
+        onOpenNavigation={onOpenNavigation}
+      />
+      <main className="p-4 pt-[calc(var(--header-height)+1rem)] sm:p-6 sm:pt-[calc(var(--header-height)+1.5rem)] xl:p-8 xl:pt-[calc(var(--header-height)+2rem)]">
         <div className="content-shell">
           <Outlet />
         </div>
@@ -49,7 +54,10 @@ export function DashboardLayout() {
           collapsed ? 'lg:pl-20' : 'lg:pl-[var(--sidebar-width)]',
         )}
       >
-        <DashboardContent onOpenNavigation={openMobileNavigation} />
+        <DashboardContent
+          collapsed={collapsed}
+          onOpenNavigation={openMobileNavigation}
+        />
       </div>
       <MobileNavigation open={mobileOpen} onOpenChange={setMobileOpen} />
     </div>
