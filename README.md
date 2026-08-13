@@ -39,50 +39,50 @@ The current navigation is organized into the following areas.
 
 ### Main workspace
 
-- **Dashboard** — high-level placement and administration indicators, quick
+- **Dashboard** - high-level placement and administration indicators, quick
   actions, and operational notices.
 
 ### PKL management
 
-- **PKL periods** — define academic/work-placement periods, date ranges,
+- **PKL periods** - define academic/work-placement periods, date ranges,
   semester, cohort, status, and notes.
-- **PKL placements** — connect students to companies, company contacts,
+- **PKL placements** - connect students to companies, company contacts,
   supervisors, periods, dates, divisions, positions, work systems, and
   placement statuses.
-- **Administrative readiness** — inspect required administrative checks,
+- **Administrative readiness** - inspect required administrative checks,
   recalculate readiness, and apply authorized overrides.
 
 ### Master data
 
-- **Students** — maintain student identity, school identifiers, class, major,
+- **Students** - maintain student identity, school identifiers, class, major,
   cohort, contact details, guardian details, PKL status, and notes.
-- **Majors** — manage vocational departments or competency areas.
-- **Classes** — manage class groups, academic year, level, major, and homeroom
+- **Majors** - manage vocational departments or competency areas.
+- **Classes** - manage class groups, academic year, level, major, and homeroom
   teacher.
-- **Companies** — maintain workplace partner profiles, industry, address,
+- **Companies** - maintain workplace partner profiles, industry, address,
   cooperation period, status, capacity, and major-specific capacity.
-- **Supervisors** — maintain school supervisor identity, department, position,
+- **Supervisors** - maintain school supervisor identity, department, position,
   contact details, status, and supervision capacity.
 
 ### Administration
 
-- **Documents** — upload and manage private PKL documents, metadata, dates,
+- **Documents** - upload and manage private PKL documents, metadata, dates,
   verification status, and document ownership.
-- **Document Automation** — select a period or single placement, validate
+- **Document Automation** - select a period or single placement, validate
   official source data, create editable Word letters, final PDFs, styled Excel
   recaps, and downloadable batch ZIP packages; manage institution identity,
   signatories, and template versions from the same workspace.
-- **Reports** — view placement reports and export professionally styled Excel
+- **Reports** - view placement reports and export professionally styled Excel
   and PDF files.
-- **Archives** — review archived periods and historical snapshots.
+- **Archives** - review archived periods and historical snapshots.
 
 ### System
 
-- **Users** — manage staff accounts, status, and optional scope by major/class.
-- **Roles and permissions** — manage RBAC reference data and available
+- **Users** - manage staff accounts, status, and optional scope by major/class.
+- **Roles and permissions** - manage RBAC reference data and available
   permission definitions.
-- **Settings** — manage device-level density and reduced-motion preferences.
-- **403 and 404 views** — provide explicit permission-denied and not-found
+- **Settings** - manage device-level density and reduced-motion preferences.
+- **403 and 404 views** - provide explicit permission-denied and not-found
   experiences.
 
 ## Technology stack
@@ -301,15 +301,15 @@ document automation, reports, archives, users, roles, and permissions
 
 The `/document-automation` workspace is organized into five operational tabs:
 
-- **Create Documents** — filter by period, class, major, company, supervisor, or
+- **Create Documents** - filter by period, class, major, company, supervisor, or
   one specific placement; select templates and DOCX/PDF formats; select the
   signing official and letter date; preview completeness; then generate.
-- **History** — download complete ZIP packages or individual DOCX, PDF, and XLSX
+- **History** - download complete ZIP packages or individual DOCX, PDF, and XLSX
   files with visible template version, letter number, student label, and size.
-- **Institution Profile** — configure the reusable letterhead identity and
+- **Institution Profile** - configure the reusable letterhead identity and
   official contact information.
-- **Signatories** — maintain active signing officials and choose one default.
-- **Templates** — review active templates and create a new immutable version
+- **Signatories** - maintain active signing officials and choose one default.
+- **Templates** - review active templates and create a new immutable version
   when wording or numbering changes.
 
 Generation is disabled until the server-side preview reports that all required
@@ -429,12 +429,12 @@ coordinated with the API contract and its consumers.
 
 ## Documentation map
 
-- docs/architecture.md — feature-based frontend architecture.
-- docs/design-system.md — tokens, primitives, accessibility, and composition.
-- docs/api-integration.md — endpoint usage, response shape, auth refresh, and
+- docs/architecture.md - feature-based frontend architecture.
+- docs/design-system.md - tokens, primitives, accessibility, and composition.
+- docs/api-integration.md - endpoint usage, response shape, auth refresh, and
   known contract boundaries.
-- docs/backend-handoff.md — capabilities awaiting backend contract support.
-- ../simpkl-api/docs/openapi.yaml — machine-readable API contract.
+- docs/backend-handoff.md - capabilities awaiting backend contract support.
+- ../simpkl-api/docs/openapi.yaml - machine-readable API contract.
 
 ## Scope and roadmap boundary
 

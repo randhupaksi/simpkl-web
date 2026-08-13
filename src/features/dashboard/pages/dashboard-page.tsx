@@ -431,5 +431,5 @@ function ChartEmptyState({ label, compact = false }: { label: string; compact?: 
 const chartTooltipStyle = { borderRadius: 'var(--radius-md)', borderColor: 'var(--border)', background: 'var(--surface)', boxShadow: 'var(--shadow-md)', fontSize: 12 }
 function percentage(value: number, total: number) { return total > 0 ? Math.round((value / total) * 100) : 0 }
 function firstName(name?: string) { return name?.trim().split(/\s+/)[0] || 'Pengguna' }
-function formatShortDate(value: string) { if (!value) return '—'; return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(new Date(`${value}T00:00:00`)) }
+function formatShortDate(value: string) { if (!value) return '-'; return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(new Date(`${value}T00:00:00`)) }
 function formatActivityDate(value: string) { if (!value) return 'Baru saja'; return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(value)) }

@@ -4,9 +4,9 @@ import 'dayjs/locale/id'
 dayjs.locale('id')
 
 export function formatDate(value?: string | null) {
-  if (!value) return '—'
+  if (!value) return '-'
   const date = dayjs(value)
-  return date.isValid() ? date.format('DD MMM YYYY') : '—'
+  return date.isValid() ? date.format('DD MMM YYYY') : '-'
 }
 
 export function formatFileSize(bytes: number) {
@@ -16,6 +16,6 @@ export function formatFileSize(bytes: number) {
 }
 
 export function compactId(value?: string) {
-  if (!value) return '—'
+  if (!value) return '-'
   return value.length > 12 ? `${value.slice(0, 8)}…` : value
 }

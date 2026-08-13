@@ -33,7 +33,7 @@ export const companyColumns: ColumnDef<Company>[] = [
   {
     accessorKey: 'city',
     header: 'Lokasi',
-    cell: ({ row }) => row.original.city || '—',
+    cell: ({ row }) => row.original.city || '-',
   },
   {
     accessorKey: 'capacity',
