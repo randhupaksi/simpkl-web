@@ -247,7 +247,7 @@ function GeneratorPanel() {
             <StepTitle
               number="1"
               title="Pilih data PKL"
-              description="Filter dapat menghasilkan satu surat atau satu batch untuk seluruh kelas, jurusan, perusahaan, maupun periode."
+              description="Filter dapat menghasilkan satu surat atau satu batch berdasarkan periode, siswa, jurusan, perusahaan, maupun pembimbing."
             />
           </CardHeader>
           <CardContent className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -260,23 +260,36 @@ function GeneratorPanel() {
                 setFilters((current) => ({
                   ...current,
                   period_id: period_id || undefined,
+                  placement_ids: undefined,
                 }))
                 previewMutation.reset()
               }}
             />
-            <FilterSelect
-              label="Kelas"
-              endpoint={API_ENDPOINTS.classes}
-              value={filters.class_id}
-              placeholder="Semua kelas"
-              onChange={(class_id) => {
-                setFilters((current) => ({
-                  ...current,
-                  class_id: class_id || undefined,
-                }))
-                previewMutation.reset()
-              }}
-            />
+            <FormField
+              id="filter-specific-placement"
+              label="Siswa/penempatan spesifik"
+              hint="Opsional; pilih satu data untuk membuat surat individual."
+            >
+              <ResourceSelectField
+                endpoint={API_ENDPOINTS.placements}
+                value={filters.placement_ids?.[0] ?? ''}
+                queryParams={{
+                  period_id: filters.period_id,
+                  major_id: filters.major_id,
+                  company_id: filters.company_id,
+                  supervisor_id: filters.supervisor_id,
+                }}
+                onChange={(placementID) => {
+                  setFilters((current) => ({
+                    ...current,
+                    placement_ids: placementID ? [placementID] : undefined,
+                  }))
+                  previewMutation.reset()
+                }}
+                placeholder="Semua siswa sesuai filter"
+                emptyLabel="Semua siswa sesuai filter"
+              />
+            </FormField>
             <FilterSelect
               label="Jurusan"
               endpoint={API_ENDPOINTS.majors}
@@ -286,6 +299,7 @@ function GeneratorPanel() {
                 setFilters((current) => ({
                   ...current,
                   major_id: major_id || undefined,
+                  placement_ids: undefined,
                 }))
                 previewMutation.reset()
               }}
@@ -299,6 +313,7 @@ function GeneratorPanel() {
                 setFilters((current) => ({
                   ...current,
                   company_id: company_id || undefined,
+                  placement_ids: undefined,
                 }))
                 previewMutation.reset()
               }}
@@ -312,29 +327,11 @@ function GeneratorPanel() {
                 setFilters((current) => ({
                   ...current,
                   supervisor_id: supervisor_id || undefined,
+                  placement_ids: undefined,
                 }))
                 previewMutation.reset()
               }}
             />
-            <FormField
-              id="filter-specific-placement"
-              label="Siswa/penempatan spesifik"
-              hint="Opsional; pilih satu data untuk membuat surat individual."
-            >
-              <ResourceSelectField
-                endpoint={API_ENDPOINTS.placements}
-                value={filters.placement_ids?.[0] ?? ''}
-                onChange={(placementID) => {
-                  setFilters((current) => ({
-                    ...current,
-                    placement_ids: placementID ? [placementID] : undefined,
-                  }))
-                  previewMutation.reset()
-                }}
-                placeholder="Semua siswa sesuai filter"
-                emptyLabel="Semua siswa sesuai filter"
-              />
-            </FormField>
             <FormField
               id="batch-name"
               label="Nama paket"
@@ -430,7 +427,7 @@ function GeneratorPanel() {
                     .filter((item) => item.status === 'active')
                     .map((item) => ({
                       value: item.id,
-                      label: `${item.name} — ${item.title}`,
+                      label: `${item.name} - ${item.title}`,
                     }))}
                 />
               </FormField>
@@ -513,7 +510,7 @@ function GeneratorPanel() {
               value={
                 previewMutation.data
                   ? String(previewMutation.data.document_count)
-                  : '—'
+                  : '-'
               }
             />
             <SummaryRow
@@ -523,7 +520,7 @@ function GeneratorPanel() {
             <SummaryRow
               label="Format surat"
               value={
-                formats.map((item) => item.toUpperCase()).join(', ') || '—'
+                formats.map((item) => item.toUpperCase()).join(', ') || '-'
               }
             />
           </CardContent>
@@ -549,6 +546,10 @@ function PreviewResult({
   preview: ReturnType<typeof usePreviewAutomationMutation>['data']
 }) {
   if (!preview) return null
+
+  const issues = preview.issues ?? []
+  const placements = preview.placements ?? []
+
   return (
     <div className="space-y-4">
       <Alert tone={preview.ready ? 'success' : 'danger'}>
@@ -557,7 +558,7 @@ function PreviewResult({
           <AlertTitle>
             {preview.ready
               ? 'Data siap dibuat'
-              : `${preview.issues.length} masalah perlu diperbaiki`}
+              : `${issues.length} masalah perlu diperbaiki`}
           </AlertTitle>
           <AlertDescription>
             {preview.placement_count} penempatan akan menghasilkan sekitar{' '}
@@ -565,10 +566,10 @@ function PreviewResult({
           </AlertDescription>
         </div>
       </Alert>
-      {preview.issues.length > 0 ? (
+      {issues.length > 0 ? (
         <div className="border-border max-h-64 overflow-y-auto rounded-[var(--radius-md)] border">
           <ul className="divide-border-subtle divide-y">
-            {preview.issues.map((issue, index) => (
+            {issues.map((issue, index) => (
               <li
                 key={`${issue.placement_id}-${issue.field}-${index}`}
                 className="flex gap-3 px-4 py-3 text-sm"
@@ -583,7 +584,7 @@ function PreviewResult({
           </ul>
         </div>
       ) : null}
-      {preview.placements.length > 0 ? (
+      {placements.length > 0 ? (
         <div className="border-border overflow-x-auto rounded-[var(--radius-md)] border">
           <table className="w-full min-w-[44rem] text-left text-sm">
             <thead className="bg-surface-muted text-muted-foreground">
@@ -595,7 +596,7 @@ function PreviewResult({
               </tr>
             </thead>
             <tbody className="divide-border-subtle divide-y">
-              {preview.placements.slice(0, 10).map((row) => (
+              {placements.slice(0, 10).map((row) => (
                 <tr key={row.placement_id}>
                   <td className="px-4 py-3">
                     <p className="font-semibold">{row.student_name}</p>
@@ -618,9 +619,9 @@ function PreviewResult({
               ))}
             </tbody>
           </table>
-          {preview.placements.length > 10 ? (
+          {placements.length > 10 ? (
             <p className="border-border text-muted-foreground border-t px-4 py-3 text-xs">
-              Menampilkan 10 dari {preview.placements.length} data.
+              Menampilkan 10 dari {placements.length} data.
             </p>
           ) : null}
         </div>
@@ -766,7 +767,7 @@ function HistoryPanel() {
                       {document.student_name || 'Rekap massal'}
                     </td>
                     <td className="px-5 py-4 font-mono text-xs">
-                      {document.document_number || '—'}
+                      {document.document_number || '-'}
                     </td>
                     <td className="px-5 py-4">
                       <Badge
@@ -1147,7 +1148,7 @@ function TemplatesPanel({ canManage }: { canManage: boolean }) {
           <CardHeader>
             <SectionTitle>
               {form.id
-                ? `Edit ${form.name} — akan dibuat sebagai versi baru`
+                ? `Edit ${form.name} - akan dibuat sebagai versi baru`
                 : 'Template dokumen baru'}
             </SectionTitle>
             <Typography variant="caption">
